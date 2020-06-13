@@ -1,0 +1,17 @@
+#include<stdio.h>
+int main()
+{
+     long long int i,t,x,y,c;
+    scanf("%lld",&t);
+    for(i=0;i<t;i++){
+        scanf("%lld%lld",&x,&y);
+        c=x-y;
+        if(c<2){
+            printf("NO\n");
+        }
+        else {
+            printf("YES\n");
+        }
+    }
+    return 0;
+}

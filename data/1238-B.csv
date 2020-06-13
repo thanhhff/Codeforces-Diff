@@ -1,0 +1,5805 @@
+submit_id,user_name,code,problem,lang,verdict,contest_id
+74302198,patilc125,"#include <stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<math.h>
+long long int cmpfunc (const void * a, const void * b) {
+   return ( *(long long int *)a - *(long long int*)b );
+}
+
+
+int main(void){
+   
+long long int test,i,j,n,count,flag=0,x1,y1,o1=0,o2=0,x,m,l,max,k,sum2,min,f,r,o,sum1,sum=0,y,b,count1,a[1000000]={0};
+scanf(""%lld"",&test);
+while(test--){
+scanf(""%lld%lld"",&n,&m);
+
+for(i=0;i<n;i++){
+    scanf(""%lld"",&a[i]);
+    
+}
+count=0;
+qsort(a,n,sizeof(long long int),cmpfunc);
+max=0;
+x=0;
+sum=0;
+for(i=n-1;i>=0;i--){
+  //   printf(""%lld %lld %lld\n"",a[i]-sum,sum,count);
+    if(max!=a[i]){
+       
+       
+        if(a[i]-sum<=0){
+            break;
+        }
+        count++;
+        sum+=m;
+        max=a[i];
+        
+        }
+    
+   
+}
+printf(""%lld\n"",count);
+}
+return 0;
+}",B - Kill `Em All,GNU C11,OK,1238
+74204107,jayanthm2002,"#include<stdio.h>
+
+void merge(int arr[], int l, int m, int r) 
+{ 
+    int i, j, k; 
+    int n1 = m - l + 1; 
+    int n2 =  r - m; 
+    int L[n1], R[n2]; 
+    for (i = 0; i < n1; i++) 
+        L[i] = arr[l + i]; 
+    for (j = 0; j < n2; j++) 
+        R[j] = arr[m + 1+ j]; 
+    i = 0; 
+    j = 0; 
+    k = l;
+    while (i < n1 && j < n2) 
+    { 
+        if (L[i] <= R[j]) 
+        { 
+            arr[k] = L[i]; 
+            i++; 
+        } 
+        else
+        { 
+            arr[k] = R[j]; 
+            j++; 
+        } 
+        k++; 
+    } 
+    while (i < n1) 
+    { 
+        arr[k] = L[i]; 
+        i++; 
+        k++; 
+    } 
+    while (j < n2) 
+    { 
+        arr[k] = R[j]; 
+        j++; 
+        k++; 
+    } 
+} 
+  
+void sort(int arr[],int l, int r) 
+{ 
+    if (l < r) 
+    { 
+        int m = l+(r-l)/2; 
+        sort(arr, l, m); 
+        sort(arr, m+1, r); 
+  
+        merge(arr, l, m, r); 
+    } 
+} 
+
+int main()
+{
+    int q;
+    scanf(""%d"",&q);
+    while(q--)
+    {
+        int n,c;
+        scanf(""%d %d"",&n,&c);
+        int arr[n];
+        for(int i=0;i<n;i++)
+        scanf(""%d"",&arr[i]);
+        sort(arr,0,n-1);
+        int count=0;
+        for(int j=n-1;j>=0;)
+        {
+            int temp=arr[j];
+            while(arr[j-1]==temp&&j>0){
+                j--;
+            }
+            arr[j]-=count*c;
+            if(arr[j]>0)
+            count++;
+            j--;
+        }
+        printf(""%d\n"",count);
+    }
+}
+
+",B - Kill `Em All,GNU C11,OK,1238
+73132264,zym996,"#include <stdio.h>
+#include <stdlib.h>
+
+void mergeSort(int *array, int begin, int end);
+void merge(int *array, int begin, int middle, int end);
+
+
+int coordinate[100000];
+
+int main() {
+	int N;
+	scanf(""%d"", &N);
+
+	while (N--) {
+		int n, r;
+		scanf(""%d %d"", &n, &r);
+
+		int i;
+		for (i = 0; i < n; i++) {
+			scanf(""%d"", &coordinate[i]);
+		}
+
+		mergeSort(coordinate, 0, n-1);
+		int counter = 0, count = 1;
+		
+		while (n > 1) {
+			for (i = n-1; i >= 0; i--) {
+				if (coordinate[i] != coordinate[i-1]) {
+					break;
+				}
+			}
+			n = i + 1;
+
+			if (coordinate[n-2] <= count * r) {
+				break;
+			}
+
+			count++;
+			n--;
+		}
+
+		counter = count;
+		printf(""%d\n"", counter);
+	}
+
+	return 0;
+}
+
+void mergeSort(int *array, int begin, int end) {
+	if (begin >= end) {
+		return;
+	}
+	if (begin < end) {
+		int middle = (begin + (end - begin)/2);
+		if (middle > begin) {
+			mergeSort(array, begin, middle);
+		}
+		if (end > middle +1) {
+			mergeSort(array, middle+1, end);
+		}
+		merge(array, begin, middle, end);
+	}
+}
+
+void merge(int *array, int begin, int middle, int end) {
+	int n1 = middle - begin + 1;
+	int n2 = end - middle;
+
+	int *subArray1 = (int*)malloc((n1) * sizeof(int));
+	int *subArray2 = (int*)malloc((n2) * sizeof(int));
+
+	int i;
+	for (i = 0; i < n1; i++) {
+		subArray1[i] = array[begin  + i]; 
+	} 
+	for (i = 0; i < n2; i++) {
+		subArray2[i] = array[middle + i + 1];
+	}
+ 
+	int j, k;
+	for (i = 0, j = 0, k = begin; i < n1 && j < n2; k++) {
+		if (subArray1[i] <= subArray2[j]) {
+			array[k] = subArray1[i];
+			i++;
+		}
+		else {
+			array[k] = subArray2[j];
+			j++;
+		}
+	}
+	while (i < n1) {
+		array[k++] = subArray1[i++];
+	}
+	while (j < n2) {
+		array[k++] = subArray2[j++];
+	
+	}
+
+	free(subArray1);
+	free(subArray2);
+}",B - Kill `Em All,GNU C11,OK,1238
+71410897,romarioputra,"#include <stdio.h>
+void merge(int arr[], int l, int r) {
+	int m=(l+r)/2;
+	int a=l, b=m+1, k=0, temp[r-l+1];
+	while (a<=m&&b<=r) {
+		if (arr[a]>=arr[b]) temp[k++]=arr[b++];
+		else temp[k++]=arr[a++];
+	}
+	while (a<=m) temp[k++]=arr[a++];
+	while (b<=r) temp[k++]=arr[b++];
+	for (int i=0;i<k;i++) arr[i+l]=temp[i];
+}
+void mergeSort(int arr[], int l, int r) {
+	if (l==r) return;
+	int m=(l+r)/2;
+	mergeSort(arr, l, m);
+	mergeSort(arr, m+1, r);
+	merge(arr, l, r);
+}
+int main() {
+	int t;
+	scanf(""%d"", &t);
+	while (t--) {
+		int n, r;
+		scanf(""%d %d"", &n, &r);
+		int arr[n];
+		for (int i=0;i<n;i++) scanf(""%d"", &arr[i]);
+		mergeSort(arr, 0, n-1);
+		int totrad=0, ans=0;
+		for (int i=n-1;i>=0;i--) {
+			if (i==n-1) {
+				totrad+=r;
+				ans++;
+			}
+			else {
+				if (arr[i]!=arr[i+1]) {
+					if (arr[i]-totrad>0) ans++;
+					totrad+=r;
+				} 
+			}
+		}
+		printf(""%d\n"", ans);
+	}
+}
+",B - Kill `Em All,GNU C11,OK,1238
+69953232,vjudge1,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+int n,r;
+int main()
+{
+    int t;
+    scanf(""%d"",&t);
+    for(int j=0;j<t;j++)
+    {
+        int a[100001],b[1000];
+        memset(a,0,sizeof(a));
+        memset(b,0,sizeof(b));
+        scanf(""%d%d"",&n,&r);
+        for(int i=0;i<n;i++)
+        {   
+            int m;
+            scanf(""%d"",&m);
+            a[m]++;
+        }
+        int z=0;
+        for(int i=0;i<100001;i++)
+        a[i]=0;
+        for(int i=0;i<1000;i++)
+        b[i]=0;
+        for(int i=0;i<100001;i++)
+        {   
+            if(a[i]!=0)
+            b[z++]=i;
+        }
+        int count=1;
+        int dis=r;
+        for(int i=z-2;i>=0;i--)
+        {
+            if(b[i]>dis)
+            {
+                count++;
+                dis+=r;
+            }
+            else break;
+        }
+        printf(""%d\n"",count);
+    }
+
+    return 0;
+}
+      		      			 			    	 		",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69953085,vjudge1,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+int n,r;
+int main()
+{
+    int t;
+    scanf(""%d"",&t);
+    for(int j=0;j<t;j++)
+    {
+        int a[100001],b[1000];
+        scanf(""%d%d"",&n,&r);
+        for(int i=0;i<n;i++)
+        {   
+            int m;
+            scanf(""%d"",&m);
+            a[m]++;
+        }
+        int z=0;
+        for(int i=0;i<100001;i++)
+        {
+            if(a[i]!=0)
+            b[z++]=i;
+        }
+        int count=1;
+        int dis=r;
+        for(int i=z-2;i>=0;i--)
+        {
+            if(b[i]>dis)
+            {
+                count++;
+                dis+=r;
+            }
+            else break;
+        }
+        printf(""%d\n"",count);
+    }
+    return 0;
+}
+	  	  		 		  		   		  	  	  		",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69952997,luogu_bot3,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+int n,r;
+int main()
+{
+    int t;
+    scanf(""%d"",&t);
+    for(int j=0;j<t;j++)
+    {
+        int a[100001],b[1000];
+        scanf(""%d%d"",&n,&r);
+        for(int i=0;i<n;i++)
+        {   
+            int m;
+            scanf(""%d"",&m);
+            a[m]++;
+        }
+        int z=0;
+        for(int i=0;i<100001;i++)
+        {
+            if(a[i]!=0)
+            b[z++]=i;
+        }
+        int count=1;
+        int dis=r;
+        for(int i=z-2;i>=0;i--)
+        {
+            if(b[i]>dis)
+            {
+                count++;
+                dis+=r;
+            }
+            else break;
+        }
+        printf(""%d\n"",count);
+    }
+    return 0;
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69951644,luogu_bot2,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+int main()
+{
+    int t;
+    scanf(""%d"",&t);
+    int a[100010],b[1000];
+    memset(a,0,sizeof(a));
+    memset(b,0,sizeof(a));
+    for(int j=0;j<t;j++)
+    {
+        int n,r;
+        scanf(""%d%d"",&n,&r);
+        for(int i=0;i<n;i++)
+        {   
+            long m;
+            scanf(""%ld"",&m);
+            a[m]++;
+        }
+        int z=0;
+        for(int i=0;i<100010;i++)
+        {
+            if(a[i]!=0)
+            b[z++]=i;
+        }
+        int count=1;
+        int dis=r;
+        for(int i=z-2;i>=0;i--)
+        {
+            if(b[i]>dis)
+            {
+                count++;
+                dis+=r;
+            }
+            else break;
+        }
+        printf(""2\n"");
+    }
+    return 0;
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69951032,luogu_bot3,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+int main()
+{
+    int t;
+    scanf(""%d"",&t);
+    int a[100010],b[1000];
+    memset(a,0,sizeof(a));
+    memset(b,0,sizeof(a));
+    for(int j=0;j<t;j++)
+    {
+        int n,r;
+        scanf(""%d%d"",&n,&r);
+        for(int i=0;i<n;i++)
+        {   
+            long m;
+            scanf(""%ld"",&m);
+            a[m]++;
+        }
+        int z=0;
+        for(int i=0;i<100010;i++)
+        {
+            if(a[i]!=0)
+            b[z++]=i;
+        }
+        int count=1;
+        int dis=r;
+        for(int i=z-2;i>=0;i--)
+        {
+            if(b[i]>dis)
+            {
+                count++;
+                dis+=r;
+            }
+            else break;
+        }
+        printf(""%d\n"",count);
+    }
+    return 0;
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69949955,vjudge4,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+
+int main()
+{
+    int t;
+    scanf(""%d"",&t);
+    int a[100010],b[1000];
+    memset(a,0,sizeof(a));
+    memset(b,0,sizeof(a));
+    for(int j=0;j<t;j++)
+    {
+        int n,r;
+        scanf(""%d%d"",&n,&r);
+        for(int i=0;i<n;i++)
+        {   
+            long m;
+            scanf(""%ld"",&m);
+            a[m]++;
+        }
+        int z=0;
+        for(int i=0;i<100010;i++)
+        {
+            if(a[i]!=0)
+            b[z++]=i;
+        }
+        int count=1;
+        int dis=r;
+        for(int i=z-2;i>=0;i--)
+        {
+            if(b[i]>dis)
+            {
+                count++;
+                dis+=r;
+            }
+            else break;
+        }
+        printf(""%d\n"",count);
+    }
+    return 0;
+}
+  		    			 		  						 	 	 		",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69949823,vjudge4,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+int main()
+{
+    int t;
+    scanf(""%d"",&t);
+    int a[100010],b[1000];
+    memset(a,0,sizeof(a));
+    memset(b,0,sizeof(a));
+    for(int j=0;j<t;j++)
+    {
+        int n,r;
+        scanf(""%d%d"",&n,&r);
+        for(int i=0;i<n;i++)
+        {   
+            long m;
+            scanf(""%ld"",&m);
+            a[m]++;
+        }
+        int z=0;
+        for(int i=0;i<100010;i++)
+        {
+            if(a[i]!=0)
+            b[z++]=i;
+        }
+        int count=1;
+        int now=z;
+        int dis=r;
+        for(int i=z-2;i>0;i--)
+        {
+            if(b[i]>dis)
+            {
+                count++;
+                dis+=r;
+            }
+            else break;
+        }
+        printf(""%d\n"",count);
+    }
+    return 0;
+}
+	    		 	   		 		 			   		  			",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69949408,vjudge5,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+
+int main()
+{
+    int t;
+    scanf(""%d"",&t);
+    int a[100001],b[1000];
+    memset(a,0,sizeof(a));
+    memset(b,0,sizeof(a));
+    for(int j=0;j<t;j++)
+    {
+        int n,r;
+        scanf(""%d%d"",&n,&r);
+        for(int i=0;i<n;i++)
+        {   
+            int m;
+            scanf(""%d"",&m);
+            a[m]++;
+        }
+        int z=0;
+        for(int i=0;i<100001;i++)
+        {
+            if(a[i]!=0)
+            b[z++]=i;
+        }
+        int count=1;
+        int now=z;
+        int dis=r;
+        for(int i=z-2;i>0;i--)
+        {
+            if(b[i]>dis)
+            {
+                count++;
+                dis+=r;
+            }
+            else break;
+        }
+        printf(""%d\n"",count);
+    }
+
+    return 0;
+}
+  		 				 		 		 		   	 	 		 	",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69949082,vjudge1,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+
+int main()
+{
+    int t;
+    scanf(""%d"",&t);
+    int a[10001],b[10001];
+    memset(a,0,sizeof(a));
+    memset(b,0,sizeof(a));
+    for(int j=0;j<t;j++)
+    {
+        int n,r;
+        scanf(""%d%d"",&n,&r);
+        for(int i=0;i<n;i++)
+        {   
+            int m;
+            scanf(""%d"",&m);
+            a[m]++;
+        }
+        int z=0;
+        for(int i=0;i<10001;i++)
+        {
+            if(a[i]!=0)
+            b[z++]=i;
+        }
+        int count=1;
+        int now=z;
+        int dis=r;
+        for(int i=z-2;i>0;i--)
+        {
+            if(b[i]>dis)
+            {
+                count++;
+                dis+=r;
+            }
+            else break;
+        }
+        printf(""%d\n"",count);
+    }
+    return 0;
+}
+		  	  	 	   	 	   					  	",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69948933,vjudge1,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+
+int main()
+{
+    int t;
+    scanf(""%d"",&t);
+    int a[10000],b[10000];
+    memset(a,0,sizeof(a));
+    memset(b,0,sizeof(a));
+    for(int j=0;j<t;j++)
+    {
+        int n,r;
+        scanf(""%d%d"",&n,&r);
+        for(int i=0;i<n;i++)
+        {   
+            int m;
+            scanf(""%d"",&m);
+            a[m]++;
+        }
+        int z=0;
+        for(int i=0;i<10000;i++)
+        {
+            if(a[i]!=0)
+            b[z++]=i;
+        }
+        int count=1;
+        int now=z;
+        int dis=r;
+        for(int i=z-2;i>0;i--)
+        {
+            if(b[i]>dis)
+            {
+                count++;
+                dis+=r;
+            }
+            else break;
+        }
+        printf(""%d\n"",count);
+    }
+    return 0;
+}
+   		 		 		    	 			 		 	  			",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69948226,vjudge3,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+
+int main()
+{
+    int t;
+    scanf(""%d"",&t);
+    for(int j=0;j<t;j++)
+    {
+        int n,r;
+        scanf(""%d%d"",&n,&r);
+        int a[10000];
+        memset(a,0,sizeof(a));
+        for(int i=0;i<n;i++)
+        {   
+            int m;
+            scanf(""%d"",&m);
+            a[m]++;
+        }
+        int b[n];
+        memset(b,0,sizeof(b));
+        int z=0;
+        for(int i=0;i<10000;i++)
+        {
+            if(a[i]!=0)
+            b[z++]=i;
+        }
+        int count=1;
+        int now=z;
+        int dis=r;
+        for(int i=z-2;i>0;i--)
+        {
+            if(b[i]>dis)
+            {
+                count++;
+                dis+=r;
+            }
+            else break;
+        }
+        printf(""%d\n"",count);
+    }
+    return 0;
+}
+ 		  	 	  	  			 	 		  		     	",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69947421,vjudge5,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+
+int main()
+{
+    int t;
+    scanf(""%d"",&t);
+    for(int j=0;j<t;j++)
+    {
+        int n,r;
+        scanf(""%d%d"",&n,&r);
+        int a[10000];
+        memset(a,0,sizeof(a));
+        for(int i=0;i<n;i++)
+        {   
+            int m;
+            scanf(""%d"",&m);
+            a[m]++;
+        }
+        int b[n];
+        memset(b,0,sizeof(b));
+        int z=0;
+        for(int i=0;i<10000;i++)
+        {
+            if(a[i]!=0)
+            b[z++]=i;
+        }
+        int count=0;
+        int now=z;
+        n=z;
+        while(now>0)
+        {   
+            if(b[n-1]>0)
+            {
+                b[n-1]=0;
+                n--;
+                count++;
+                now--;
+            for(int i=0;i<n;i++)
+            {
+                b[i]-=r;
+                if(b[i]<=0)
+                {
+                    b[i]=0;
+                    now--;
+                }
+            }
+            }
+            else{
+                n--;
+                now--;
+                }
+            
+        
+        }
+        printf(""%d\n"",count);
+    }
+    return 0;
+}
+	 		   		 	    	      						",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69947119,vjudge1,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+
+int main()
+{
+    int t;
+    scanf(""%d"",&t);
+    for(int j=0;j<t;j++)
+    {
+        int n,r;
+        scanf(""%d%d"",&n,&r);
+        int a[10000];
+        memset(a,0,sizeof(a));
+        for(int i=0;i<n;i++)
+        {   
+            int m;
+            scanf(""%d"",&m);
+            a[m]++;
+        }
+        int b[n];
+        memset(b,0,sizeof(b));
+        int z=0;
+        for(int i=0;i<10000;i++)
+        {
+            if(a[i]!=0)
+            b[z++]=i;
+        }
+        int count=0;
+        int now=z;
+        n=z;
+        while(now)
+        {   
+            if(b[n-1]>0)
+            {
+                b[n-1]=0;
+                n--;
+                count++;
+                now--;
+            }
+            else{
+                n--;
+                now--;
+                }
+            for(int i=0;i<n-1;i++)
+            {
+                b[i]-=r;
+                if(b[i]<=0)
+                {
+                    b[i]=0;
+                    now--;
+                }
+            }
+        
+        }
+        printf(""%d\n"",count);
+    }
+    return 0;
+}
+	        	 			   		   					   	",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69945948,vjudge2,"#include <stdio.h>
+#include <stdlib.h>
+
+/* run this program using the console pauser or add your own getch, system(""pause"") or input loop */
+int max(int*a,int n){
+	int i,q;
+	int max=0;
+	for(i=0;i<n;i++){
+		if(a[i]>0&&a[i]>max){
+			max=a[i];
+		}
+	}
+	return max;
+}
+int main(int argc, char *argv[]) {
+	int t,i,j;
+	scanf(""%d"",&t);
+	for(i=0;i<t;i++){
+		int n,r;
+		scanf(""%d %d"",&n,&r);
+		int a[n];
+		for(j=0;j<n;j++){
+			scanf(""%d"",&a[j]);
+		}
+		int p,left=n,re=0;
+		while(left>0){
+			p=max(a,n);
+		//	printf(""%d "",p);
+			for(j=0;j<n;j++){
+				if(a[j]==p){
+					a[j]=0;
+				//	printf(""%d死了"",j);	
+					left--;
+				}
+			}
+			re++;
+			for(j=0;j<n;j++){
+				if(a[j]>0){
+					if(j>p){
+						a[j]+=r;
+					}
+					if(j<p){
+						a[j]-=r;
+						if(a[j]<=0){
+							left--;
+							//printf(""%d死了"",j);	
+						}
+					}
+				} 
+			}
+		//	printf(""\n"");
+		}
+		printf(""%d\n"",re);
+	} 
+	return 0;
+}
+ 		 			  			   	 	  	  	     	",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69213360,LockedBox42,"#include <stdio.h>
+#include <stdlib.h>
+
+int ordena(const void * a, const void * b){
+  int x= (*(int *)a);
+  int y= (*(int *)b);
+
+  if(x>y)
+    return 1;
+  else
+    return -1;
+}
+
+int main (){
+  int q,n,r,flag=0;
+  int coor[1123456];
+
+  scanf(""%d%d%d"", &q, &n, &r);
+
+  while(q--)
+  {
+    for (int i=0; i<n; i++)
+      scanf(""%d"", &coor[i]);
+
+    qsort(coor,n,sizeof(int), ordena);
+
+    for(int i=n-1; i>=0; i--)
+    {
+      if(coor[i-1] != coor[i])
+      {
+        for(int j=1; j<=n; j++)
+        {
+          if( r*j>= (coor[i-1]-r) )
+          {
+            printf(""%d\n"",j);
+            flag=1;
+            break;
+          }
+          if (flag==1) break;
+        }
+      }
+      if (flag==1) break;
+    }
+  }
+  return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+69209041,LockedBox42,"#include <stdio.h>
+
+int main (){
+  int q,n,r,conta=0;
+  int coor[1123456];
+
+  scanf(""%d%d%d"", &q, &n, &r);
+
+  while(q--)
+  {
+  for (int i=0; i<n; i++)
+    scanf(""%d"", &coor[i]);
+
+  int maior=coor[0];
+  for(int i=0; i<n; i++){
+    if(coor[i]>maior)
+      maior=coor[i];
+  }
+  for(int i=0; i<n; i++){
+    if(coor[i]==maior)
+      coor[i]=0;
+  }
+
+  for(int i=0; i<n; i++){
+    if( (coor[i] != 0) && (coor[i+1]==0 || coor[i-1]==0) ){
+      coor[i]=coor[i]-r;
+      conta++;
+    }
+  }
+}
+printf(""%d\n"",conta);
+  return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+67619240,satya_chaitanya,"#include<stdio.h>
+#include <stdlib.h> 
+int comp(const void* p,const void* q)
+{
+	return -(*( const int*)q)+(*( const int*)p);
+	
+}
+#define ll long long
+ll c[100001];
+int main(){
+ll t;
+scanf(""%lld"",&t);
+while(t--){
+ll n,r;
+scanf(""%lld%lld"",&n,&r);
+ll arr[n],count=0;
+for(int i=0;i<n;i++) scanf(""%lld"",&arr[i]);
+qsort(arr,n,sizeof(ll),comp);
+ll i,j=0;
+for( i=0;i<n;i++){
+if(arr[i]%r==0) c[i]=arr[i]/r;
+else c[i]=(arr[i]/r)+1;
+}
+for(i=n-1;i>=j;i--){
+while(i>=1&&arr[i]==arr[i-1]) i--;
+count++;
+while((j<=i)&&(j<(n))&&c[j]<=(count)) j++;
+}
+printf(""%lld\n"",count);
+}
+return 0;}
+",B - Kill `Em All,GNU C11,OK,1238
+67618696,satya_chaitanya,"#include<stdio.h>
+#include <stdlib.h> 
+int comp(const void* p,const void* q)
+{
+	return -(*( const int*)q)+(*( const int*)p);
+	
+}
+#define ll long long
+ll c[100001];
+int main(){
+ll t;
+scanf(""%lld"",&t);
+while(t--){
+ll n,r;
+scanf(""%lld%lld"",&n,&r);
+ll arr[n],count=0;
+for(int i=0;i<n;i++) scanf(""%lld"",&arr[i]);
+qsort(arr,n,sizeof(ll),comp);
+ll i,j=0;
+for( i=0;i<n;i++){
+if(arr[i]%r==0) c[i]=arr[i]/r;
+else c[i]=(arr[i]/r)+1;
+}
+for(i=n-1;i>=j;i--){
+while(i>=1&&arr[i]==arr[i-1]) i--;
+while((j<i)&&(j<(n))&&c[j]<=(n-i)) j++;
+count++;
+
+
+
+
+}
+printf(""%lld\n"",count);
+}
+return 0;}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+67380297,Trinadh724,"#include<stdio.h>
+void merging(long long arr[],long long start,long long mid,long long end);
+
+void sort(long long arr[],long long start,long long end)
+{
+        long long mid;
+        if(end-start+1>1)
+        {
+                mid=(start+end)/2;
+                sort(arr,start,mid);
+                sort(arr,mid+1,end);
+                merging(arr,start,mid,end);
+        }
+}
+//for merging we use this algo
+void merging(long long arr[],long long start,long long mid,long long end)
+{
+        long long len1,len2,i,j,k;
+        len1=mid-start+1;
+        len2=end-mid-1+1;
+        long long right[len2],left[len1];
+        //seperating the given array into two arrays so that they are then later on combined
+        for(i=0;i<len1;i++)
+        {
+                left[i]=arr[i+start];
+        }
+        for(i=0;i<len2;i++)
+        {
+                right[i]=arr[i+mid+1];
+        }
+        i=0;j=0;
+        k=start;
+        while((i<len1)&&(j<len2))
+        {
+                if(left[i]>right[j])
+                {
+                        arr[k]=right[j];
+                        j++;
+                        k++;
+                }
+                else
+                {
+                        arr[k]=left[i];
+                        i++;
+                        k++;
+                }
+        }
+        if(i==len1)
+        {
+                while(j<len2)
+                {
+                        arr[k]=right[j];
+                        j++;
+                        k++;
+                }
+        }
+        else
+        {
+                while(i<len1)
+                {
+                        arr[k]=left[i];
+                        i++;
+                        k++;
+                }
+        }
+}
+
+int main()
+{
+	long long int q;
+	scanf(""%I64lld"",&q);
+long long 	int n,r;
+	long long int x[100005],v[100005];
+	for(int i=0;i<q;i++)
+	{
+		scanf(""%I64lld %I64lld"",&n,&r);
+		for(int j=0;j<n;j++)
+		{
+			scanf(""%I64lld"",&x[j]);
+		}
+		sort(x,0,n-1);
+		long long k=0;
+		v[0]=x[0];
+		for(int j=1;j<n;j++)
+		{
+			while(x[j]!=v[k])
+			{
+				k++;
+				v[k]=x[j];
+			}
+		}
+		long long l=0;
+		while((v[k-l]>0)&&(k-l>=0))
+		{
+			l++;
+			v[k-l]=v[k-l]-l*r;
+		}
+		printf(""%I64lld\n"",l);
+	}
+	return 0;
+}
+
+
+
+
+",B - Kill `Em All,GNU C11,OK,1238
+65811054,Dream.to,"#include<stdio.h>
+void merge(int arr[], int l, int m, int r)
+{
+	int i, j, k;
+	int n1 = m - l + 1;
+	int n2 = r - m;
+	int L[n1], R[n2];
+	for (i = 0; i < n1; i++)
+		L[i] = arr[l + i];
+	for (j = 0; j < n2; j++)
+		R[j] = arr[m + 1+ j];
+
+
+	i = 0;
+	j = 0;
+	k = l;
+	while (i < n1 && j < n2)
+	{
+		if (L[i] <= R[j])
+		{
+			arr[k] = L[i];
+			i++;
+		}
+		else
+		{
+			arr[k] = R[j];
+			j++;
+		}
+		k++;
+	}
+	while (i < n1)
+	{
+		arr[k] = L[i];
+		i++;
+		k++;
+	}
+	while (j < n2)
+	{
+		arr[k] = R[j];
+		j++;
+		k++;
+	}
+}
+void mergeSort(int arr[], int l, int r)
+{
+	if (l < r)
+	{
+		int m = l+(r-l)/2;
+		mergeSort(arr, l, m);
+		mergeSort(arr, m+1, r);
+
+		merge(arr, l, m, r);
+	}
+}
+int main(){
+int t,n,r,i,j;
+scanf(""%d"",&t);
+int *x,*or,len;
+for(;t>0;t--){
+        len=0;
+    scanf(""%d %d"",&n,&r);
+    x=(int *)malloc(n*sizeof(int));
+    for(i=0;i<n;i++) scanf(""%d"",&x[i]);
+    mergeSort(x,0,n-1);
+    or=(int *)malloc(n*sizeof(int));
+    or[0]=x[0];
+    len++;
+    for(i=1;i<n;i++){
+        if(x[i]!=x[i-1]){
+            or[len]=x[i];
+            len++;
+        }
+    }
+    for(j=1;j<len;j++){
+        if(or[len-1-j]<=j*r) break;
+    }
+    printf(""%d\n"",j);
+    free(x);
+    free(or);
+}
+
+}
+",B - Kill `Em All,GNU C11,OK,1238
+65811019,Dream.to,"#include<stdio.h>
+void merge(int arr[], int l, int m, int r)
+{
+	int i, j, k;
+	int n1 = m - l + 1;
+	int n2 = r - m;
+	int L[n1], R[n2];
+	for (i = 0; i < n1; i++)
+		L[i] = arr[l + i];
+	for (j = 0; j < n2; j++)
+		R[j] = arr[m + 1+ j];
+
+
+	i = 0;
+	j = 0;
+	k = l;
+	while (i < n1 && j < n2)
+	{
+		if (L[i] <= R[j])
+		{
+			arr[k] = L[i];
+			i++;
+		}
+		else
+		{
+			arr[k] = R[j];
+			j++;
+		}
+		k++;
+	}
+	while (i < n1)
+	{
+		arr[k] = L[i];
+		i++;
+		k++;
+	}
+	while (j < n2)
+	{
+		arr[k] = R[j];
+		j++;
+		k++;
+	}
+}
+void mergeSort(int arr[], int l, int r)
+{
+	if (l < r)
+	{
+		int m = l+(r-l)/2;
+		mergeSort(arr, l, m);
+		mergeSort(arr, m+1, r);
+
+		merge(arr, l, m, r);
+	}
+}
+int main(){
+int t,n,r,i,j;
+scanf(""%d"",&t);
+int *x,*or,len;
+for(;t>0;t--){
+        len=0;
+    scanf(""%d %d"",&n,&r);
+    x=(int *)malloc(n*sizeof(int));
+    for(i=0;i<n;i++) scanf(""%d"",&x[i]);
+    mergeSort(x,0,n-1);
+    or=(int *)malloc(n*sizeof(int));
+    or[0]=x[0];
+    len++;
+    for(i=1;i<n;i++){
+        if(x[i]!=x[i-1]){
+            or[len]=x[i];
+            len++;
+        }
+    }
+    for(j=1;j<len;j++){
+        if(x[len-1-j]<=j*r) break;
+    }
+    printf(""%d\n"",j);
+    free(x);
+    free(or);
+}
+
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+63117134,Elpizo,"#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+int main()
+{
+    bool x[100001] = { false };
+    int *pos, xn;
+    long monst, power, xi;
+    long i, j, time;
+    long N, k;
+    scanf(""%ld"", &N);
+    for(k = 0; k < N; k++)
+    {
+        scanf(""%ld %ld"", &monst, &power);
+        if(monst == 1 && power >= 1)
+        {
+            printf(""1\n"");
+            continue;
+        }
+        xn = 0;
+        for(i = 0; i < monst; i++)
+        {
+            scanf(""%ld"", &xi);
+            x[xi] = true;
+        }
+        for(i = 0; i < 100001; i++)
+            if(x[i] == true)
+                xn++;
+        pos = malloc(xn * sizeof(int));
+        for(i = 0, j = 0; i < 100001; i++)
+            if(x[i] == true)
+            {
+                pos[j++] = i;
+            }
+        if(pos[--j] - power <= 0 || pos[--j] - power <= 0)
+        {
+            printf(""1\n"");
+            goto L;
+        }
+        time = 0;
+        for(i = xn - 1; i >= 0; --i)
+        {
+            if(pos[i] == 0)
+                break;
+            else pos[i] = 0;
+            time++;
+            if(pos[i - 1] - power > 0)
+                for(j = i - 1; j >= 0; --j)
+                    if(pos[j] - power > 0)
+                        pos[j] -= power;
+                else pos[j] = 0;
+            else break;
+        }
+        printf(""%ld\n"", time);
+        L: free(pos);
+        for(i = 0; i < 100001; i++)
+            x[i] = false;
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+63116733,Elpizo,"#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+int main()
+{
+    bool x[100001] = { false };
+    int *pos, xn;
+    long monst, power, xi;
+    long i, j, time;
+    long N, k;
+    scanf(""%ld"", &N);
+    for(k = 0; k < N; k++)
+    {
+        scanf(""%ld %ld"", &monst, &power);
+        xn = 0;
+        for(i = 0; i < monst; i++)
+        {
+            scanf(""%ld"", &xi);
+            x[xi] = true;
+        }
+        for(i = 0; i < 100001; i++)
+            if(x[i] == true)
+                xn++;
+        pos = malloc(xn * sizeof(int));
+        for(i = 0, j = 0; i < 100001; i++)
+            if(x[i] == true)
+            {
+                pos[j++] = i;
+            }
+        if(pos[--j] - power <= 0 || pos[--j] - power <= 0)
+        {
+            printf(""1\n"");
+            continue;
+        }
+        time = 0;
+        for(i = xn - 1; i >= 0; --i)
+        {
+            if(pos[i] == 0)
+                break;
+            else pos[i] = 0;
+            time++;
+            if(pos[i - 1] - power > 0)
+                for(j = i - 1; j >= 0; --j)
+                    if(pos[j] - power > 0)
+                        pos[j] -= power;
+                else pos[j] = 0;
+            else break;
+        }
+        printf(""%ld\n"", time);
+        free(pos);
+        for(i = 0; i < 100001; i++)
+            x[i] = false;
+    }
+    return 0;
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+63116281,Elpizo,"#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+int main()
+{
+    bool x[100001] = { false };
+    int *pos, xn;
+    long monst, power, xi;
+    long i, j, time;
+    long N, k;
+    scanf(""%ld"", &N);
+    for(k = 0; k < N; k++)
+    {
+        scanf(""%ld %ld"", &monst, &power);;
+        if(monst == 1 && power >= 1)
+        {
+            printf(""1\n"");
+            continue;
+        }
+        xn = 0;
+        for(i = 0; i < monst; i++)
+        {
+            scanf(""%ld"", &xi);
+            x[xi] = true;
+        }
+
+        for(i = 0; i < 100001; i++)
+            if(x[i] == true)
+                xn++;
+        pos = malloc(xn * sizeof(int));
+        for(i = 0, j = 0; i < 100001; i++)
+            if(x[i] == true)
+            {
+                pos[j++] = i;
+            }
+        if(pos[--j] - power <= 0)
+        {
+            printf(""1\n"");
+            continue;
+        }
+        time = 0;
+        for(i = xn - 1; i >= 0; --i)
+        {
+            if(pos[i] == 0)
+                break;
+            else pos[i] = 0;
+            time++;
+            if(pos[i - 1] - power > 0)
+                for(j = i - 1; j >= 0; --j)
+                    if(pos[j] - power > 0)
+                        pos[j] -= power;
+                else pos[j] = 0;
+            else break;
+        }
+        printf(""%ld\n"", time);
+        free(pos);
+        for(i = 0; i < 100001; i++)
+            x[i] = false;
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+63115760,Elpizo,"#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+int main()
+{
+    bool x[100001] = { false };
+    int *pos, xn;
+    long monst, power, xi;
+    long i, j, time;
+    long N, k;
+    scanf(""%ld"", &N);
+    for(k = 0; k < N; k++)
+    {
+        scanf(""%ld %ld"", &monst, &power);
+        if(monst == 1 && power >= 1)
+        {
+            printf(""1\n"");
+            continue;
+        }
+        xn = 0;
+        for(i = 0; i < monst; i++)
+        {
+            scanf(""%ld"", &xi);
+            x[xi] = true;
+        }
+
+        for(i = 0; i < 100001; i++)
+            if(x[i] == true)
+                xn++;
+        pos = malloc(xn * sizeof(int));
+        for(i = 0, j = 0; i < 100001; i++)
+            if(x[i] == true)
+            {
+                pos[j++] = i;
+            }
+        time = 0;
+        for(i = xn - 1; i >= 0; --i)
+        {
+            if(pos[i] == 0)
+                break;
+            else pos[i] = 0;
+            time++;
+            if(pos[i - 1] - power > 0)
+                for(j = i - 1; j >= 0; --j)
+                    if(pos[j] - power > 0)
+                        pos[j] -= power;
+                else pos[j] = 0;
+            else break;
+        }
+        printf(""%ld\n"", time);
+        free(pos);
+        for(i = 0; i < 100001; i++)
+            x[i] = false;
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+63115709,Elpizo,"#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+int main()
+{
+    bool x[100001] = { false };
+    int *pos, xn;
+    long monst, power, xi;
+    long i, j, time;
+    long N, k;
+    scanf(""%ld"", &N);
+    for(k = 0; k < N; k++)
+    {
+        scanf(""%ld %ld"", &monst, &power);
+        if(monst == 1 && power >= 1)
+        {
+            printf(""1\n"");
+            continue;
+        }
+        xn = 0;
+        for(i = 0; i < monst; i++)
+        {
+            scanf(""%ld"", &xi);
+            x[xi] = true;
+        }
+
+        for(i = 0; i < 100001; i++)
+            if(x[i] == true)
+                xn++;
+        pos = malloc(xn * sizeof(int));
+        for(i = 0, j = 0; i < 100001; i++)
+            if(x[i] == true)
+            {
+                pos[j++] = i;
+            }
+        if(pos[--j] - power <= 0)
+        {
+            printf(""1\n"");
+            continue;
+        }
+        time = 0;
+        for(i = xn - 1; i >= 0; --i)
+        {
+            if(pos[i] == 0)
+                break;
+            else pos[i] = 0;
+            time++;
+            if(pos[i - 1] - power > 0)
+                for(j = i - 1; j >= 0; --j)
+                    if(pos[j] - power > 0)
+                        pos[j] -= power;
+                else pos[j] = 0;
+            else break;
+        }
+        printf(""%ld\n"", time);
+        free(pos);
+        for(i = 0; i < 100001; i++)
+            x[i] = false;
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+63116440,Elpizo,"#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+int main()
+{
+    bool x[100001] = { false };
+    int *pos, xn;
+    long monst, power, xi;
+    long i, j, time;
+    long N, k;
+    scanf(""%ld"", &N);
+    for(k = 0; k < N; k++)
+    {
+        scanf(""%ld %ld"", &monst, &power);;
+        if(monst == 1 && power >= 1)
+        {
+            printf(""1\n"");
+            continue;
+        }
+        xn = 0;
+        for(i = 0; i < monst; i++)
+        {
+            scanf(""%ld"", &xi);
+            x[xi] = true;
+        }
+        for(i = 0; i < 100001; i++)
+            if(x[i] == true)
+                xn++;
+        pos = malloc(xn * sizeof(int));
+        for(i = 0, j = 0; i < 100001; i++)
+            if(x[i] == true)
+            {
+                pos[j++] = i;
+            }
+        if(pos[--j] - power <= 0)
+        {
+            printf(""1\n"");
+            continue;
+        }
+        time = 0;
+        for(i = xn - 1; i >= 0; --i)
+        {
+            if(pos[i] == 0)
+                break;
+            else pos[i] = 0;
+            time++;
+            if(pos[i - 1] - power > 0)
+                for(j = i - 1; j >= 0; --j)
+                    if(pos[j] - power > 0)
+                        pos[j] -= power;
+                else pos[j] = 0;
+            else break;
+        }
+        printf(""%ld\n"", time);
+        free(pos);
+        for(i = 0; i < 100001; i++)
+            x[i] = false;
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+63114100,Elpizo,"#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+int main()
+{
+    bool x[100001] = { false };
+    int *pos, xn;
+    long monst, power, xi;
+    long i, j, time;
+    long N, k;
+    scanf(""%ld"", &N);
+    for(k = 0; k < N; k++)
+    {
+        scanf(""%ld %ld"", &monst, &power);
+        xn = 0;
+        for(i = 0; i < monst; i++)
+        {
+            scanf(""%ld"", &xi);
+            x[xi] = true;
+        }
+        for(i = 0; i < 100001; i++)
+            if(x[i] == true)
+                xn++;
+        pos = malloc(xn * sizeof(int));
+        for(i = 0, j = 0; i < 100001; i++)
+            if(x[i] == true)
+            {
+                pos[j++] = i;
+            }
+        time = 0;
+        int xn2 = xn;
+        for(i = 0; i < xn; i++)
+        {
+            time++;
+            pos[--xn2] = 0;
+            for(j = xn2 - 1; j > 0; --j)
+            {
+                if(pos[j] == 0)
+                    goto L;
+                else if(pos[j] - power > 0)
+                    pos[j] -= power;
+                else pos[j] = 0;
+
+            }
+        }
+        L: printf(""%ld\n"", time);
+        free(pos);
+        for(i = 0; i < 100001; i++)
+            x[i] = false;
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+63113628,Elpizo,"#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+int main()
+{
+    bool x[100001] = { false };
+    int *pos, xn;
+    long monst, power, xi;
+    long i, j, time;
+    long N, k;
+    scanf(""%ld"", &N);
+    for(k = 0; k < N; k++)
+    {
+        scanf(""%ld %ld"", &monst, &power);
+        xn = 0;
+        for(i = 0; i < monst; i++)
+        {
+            scanf(""%ld"", &xi);
+            x[xi] = true;
+        }
+        for(i = 0; i < 100001; i++)
+            if(x[i] == true)
+                xn++;
+        pos = malloc(xn * sizeof(int));
+        for(i = 0, j = 0; i < 100001; i++)
+            if(x[i] == true)
+            {
+                pos[j++] = i;
+            }
+        time = 0;
+        int xn2 = xn;
+        for(i = 0; i < xn; i++)
+        {
+            time++;
+            pos[--xn2] = 0;
+            for(j = 0; j < xn2; j++)
+            {
+                if(pos[j] == 0)
+                    continue;
+                else if(pos[j] - power > 0)
+                    pos[j] -= power;
+                else pos[j] = 0;
+            }
+        }
+        printf(""%ld\n"", time);
+        free(pos);
+        for(i = 0; i < 100001; i++)
+            x[i] = false;
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+63112785,Elpizo,"#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+int main()
+{
+    bool x[100001] = { false };
+    int *pos, xn;
+    long monst, power, xi;
+    long i, j, time;
+    long N, k;
+    scanf(""%ld"", &N);
+    for(k = 0; k < N; k++)
+    {
+        scanf(""%ld %ld"", &monst, &power);
+        xn = 0;
+        for(i = 0; i < monst; i++)
+        {
+            scanf(""%ld"", &xi);
+            x[xi] = true;
+        }
+        for(i = 0; i < 100001; i++)
+            if(x[i] == true)
+                xn++;
+        pos = malloc(xn * sizeof(int));
+        for(i = 0, j = 0; i < 100001; i++)
+            if(x[i] == true)
+            {
+                pos[j++] = i;
+            }
+        time = 0;
+        for(i = xn - 1; i >= 0; --i)
+        {
+            pos[i] = 0;
+            time++;
+            for(j = i - 1; j >= 0; --j)
+                if(pos[j] - power > 0)
+                    pos[j] -= power;
+                else pos[j] = 0;
+            if(pos[i - 1] == 0)
+            {
+                printf(""%ld\n"", time);
+                break;
+            }
+        }
+        free(pos);
+        for(i = 0; i < 100001; i++)
+            x[i] = false;
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+63113870,Elpizo,"#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+int main()
+{
+    bool x[100001] = { false };
+    int *pos, xn;
+    long monst, power, xi;
+    long i, j, time;
+    long N, k;
+    scanf(""%ld"", &N);
+    for(k = 0; k < N; k++)
+    {
+        scanf(""%ld %ld"", &monst, &power);
+        xn = 0;
+        for(i = 0; i < monst; i++)
+        {
+            scanf(""%ld"", &xi);
+            x[xi] = true;
+        }
+        for(i = 0; i < 100001; i++)
+            if(x[i] == true)
+                xn++;
+        pos = malloc(xn * sizeof(int));
+        for(i = 0, j = 0; i < 100001; i++)
+            if(x[i] == true)
+            {
+                pos[j++] = i;
+            }
+        time = 0;
+        for(i = 0; i < xn; i++)
+        {
+            time++;
+            pos[--xn] = 0;
+            for(j = xn - 1; j > 0; --j)
+            {
+                if(pos[j] == 0)
+                    goto L;
+                else if(pos[j] - power > 0)
+                    pos[j] -= power;
+                else pos[j] = 0;
+
+            }
+        }
+        L: printf(""%ld\n"", time);
+        free(pos);
+        for(i = 0; i < 100001; i++)
+            x[i] = false;
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+63067548,RajMaheshwari,"#include<stdio.h>
+
+void merge(int arr[],int l,int m,int r)
+{
+        r++;
+        int i=0; int new[r-l];
+
+        int k=0,x=l,y=m+1;
+        while(x<(m+1) && y<r)
+        {
+                if(arr[x]<=arr[y])
+                {new[k]=arr[x]; x++;}
+                else
+                {new[k]=arr[y]; y++;}
+
+                k++;
+        }
+
+        if(y==r)
+                for(i=k;i<r-l;i++)
+                {new[i]=arr[x];x++;}
+
+        else
+                for(i=k;i<r-l;i++)
+                {new[i]=arr[y];y++;}
+
+        for(i=0;i<(r-l);i++)
+                arr[i+l]=new[i];
+
+}
+
+void sort(int arr[],int l,int r)
+{
+        int m=(l+r-1)/2;
+
+        if(l<r)
+        {
+                sort(arr,l,m);  sort(arr,m+1,r);
+        }
+
+        merge(arr,l,m,r);
+}
+
+int main()
+{
+
+int n=0,r=0,q=0;
+scanf(""%d"",&q);
+
+int arr[100000],i=0;
+
+			while(q>0)
+			{
+
+	scanf(""%d %d"",&n,&r);
+
+for(i=0;i<n;i++)
+{scanf(""%d"",&arr[i]);}
+
+sort(arr,0,n-1);
+
+int j=1; //stopping redundancy
+for(i=1;i<n;i++)
+{
+if(arr[i]!=arr[i-1])
+{
+arr[j]=arr[i]; 
+//printf(""%d "",arr[j]); 
+j++;
+}
+}
+
+for(i=0;i<j;i++)
+{
+arr[i]= arr[i] - r*(j-1-i);
+}
+
+int max=j-1,min=0,avg;
+
+while(max-min>1)
+{
+avg = (max+min)/2;
+
+if(arr[avg]<=0)
+min=avg;
+else
+max=avg;
+}
+
+int t=0;
+
+if(arr[min]>0)
+min--;
+
+t = j-1-min;
+
+printf(""%d\n"",t);
+
+			q--;
+			}
+
+return 0;
+}
+
+",B - Kill `Em All,GNU C11,OK,1238
+63059898,nNguyeNn,"#include <stdio.h>
+#include <stdlib.h>
+ 
+int compare(const void * a, const void * b) 
+{ 
+    return ( *(int*)a - *(int*)b ); 
+} 
+ 
+int main(){
+    int t;
+    scanf(""%d"",&t);
+    while(t--){
+        int n,r;
+        scanf(""%d %d"",&n,&r);
+        int data[100010];
+        for(int temp = 0;temp < n;temp++){
+            scanf(""%d"",&data[temp]);
+        }
+        qsort(data,n,sizeof(int),compare);
+        int border = 0;
+        int count = 0;
+        for(int temp = n-1;temp>=0;temp--){
+            if(data[temp]==data[temp-1] && temp!=0){
+                continue;
+            }
+            if(data[temp]<=border){
+                break;
+            }
+            count = count + 1;
+            border = border + r;
+        }
+        printf(""%d\n"",count);
+        
+    }
+}
+",B - Kill `Em All,GNU C11,OK,1238
+63060143,nNguyeNn,"#include<stdio.h>
+#include<stdlib.h>
+int compare(const void * a, const void * b) 
+{ 
+    return ( *(int*)a - *(int*)b ); 
+} 
+int main()
+{
+	int n;
+	scanf(""%d"",&n);
+	while(n--)
+	{
+		int size,range;
+		scanf(""%d %d"",&size,&range);
+		int a[100010];
+		for(int j=0;j<size;++j)	scanf(""%d"",&a[j]);
+		qsort(a,size,sizeof(int),compare);
+		int count=0,border=0;
+		for(int x=size-1;x>=0;x--)
+		{
+			if(a[x]==a[x-1]&&x!=0)		continue;
+			if(a[x]<=border)			break;
+			++count;
+			border+=range;
+		}
+		printf(""%d\n"",count);
+	}
+}
+",B - Kill `Em All,GNU C11,OK,1238
+62741388,alan29,"#include <stdio.h>
+#include <stdlib.h>
+
+int compare(const void * a, const void * b) 
+{ 
+    return ( *(int*)a - *(int*)b ); 
+} 
+
+int main(){
+    int t;
+    scanf(""%d"",&t);
+    while(t--){
+        int n,r;
+        scanf(""%d %d"",&n,&r);
+        //int temp = n;
+        int data[100010];
+        for(int temp = 0;temp < n;temp++){
+            scanf(""%d"",&data[temp]);
+        }
+        qsort(data,n,sizeof(int),compare);
+        int border = 0;
+        int count = 0;
+        for(int temp = n-1;temp>=0;temp--){
+            if(data[temp]==data[temp-1] && temp!=0){
+                continue;
+            }
+            if(data[temp]<=border){
+                break;
+            }
+            count = count + 1;
+            border = border + r;
+        }
+        printf(""%d\n"",count);
+        
+    }
+}",B - Kill `Em All,GNU C11,OK,1238
+62595042,LockedBox42,"#include <stdio.h>
+#include <stdlib.h>
+
+
+int ordena(const void *a, const void *b) {
+  int x=*((int *)a);
+  int y=*((int *)b);
+
+  if (x<y){
+    return -1;
+  } else if (x>y){
+    return 1;
+  }else{
+    return 0;
+  }
+}
+
+int main () {
+  int n;  // número de monstros.
+  int r; // distancia que os inimigos são distanciados do epicentro.
+  int l; // número de linhas que serão lidas em cada loop.
+  int vet[112345]; //posição dos monstros.
+  int tiro=0;
+
+  scanf (""%d"", &l);
+
+  while (l--){
+    scanf (""%d%d"",&n,&r);
+
+    for (int i=0; i<n ; i++){
+      scanf (""%d"", &vet[i]);
+    }
+    qsort(vet,n,sizeof(int),ordena);
+    tiro=0;
+    for (int i=n-1; i>=0; i--){
+        if (vet[i]- tiro*r <= 0) {
+          break;
+        } else if (i != n-1 && vet[i] == vet[i+1] ){
+          continue;
+        }
+        tiro++;
+    }
+    printf(""%d\n"",tiro);
+  }
+
+  return 0;
+}
+",B - Kill `Em All,GNU C11,OK,1238
+62567783,super_zero,"#include<stdio.h>
+void merge(int arr[], int l, int m, int r) 
+{ 
+    int i, j, k; 
+    int n1 = m - l + 1; 
+    int n2 =  r - m; 
+  
+    /* create temp arrays */
+    int L[n1], R[n2]; 
+  
+    /* Copy data to temp arrays L[] and R[] */
+    for (i = 0; i < n1; i++) 
+        L[i] = arr[l + i]; 
+    for (j = 0; j < n2; j++) 
+        R[j] = arr[m + 1+ j]; 
+  
+    /* Merge the temp arrays back into arr[l..r]*/
+    i = 0; // Initial index of first subarray 
+    j = 0; // Initial index of second subarray 
+    k = l; // Initial index of merged subarray 
+    while (i < n1 && j < n2) 
+    { 
+        if (L[i] <= R[j]) 
+        { 
+            arr[k] = L[i]; 
+            i++; 
+        } 
+        else
+        { 
+            arr[k] = R[j]; 
+            j++; 
+        } 
+        k++; 
+    } 
+  
+    /* Copy the remaining elements of L[], if there 
+       are any */
+    while (i < n1) 
+    { 
+        arr[k] = L[i]; 
+        i++; 
+        k++; 
+    } 
+  
+    /* Copy the remaining elements of R[], if there 
+       are any */
+    while (j < n2) 
+    { 
+        arr[k] = R[j]; 
+        j++; 
+        k++; 
+    } 
+} 
+  
+/* l is for left index and r is right index of the 
+   sub-array of arr to be sorted */
+void mergeSort(int arr[], int l, int r) 
+{ 
+    if (l < r) 
+    { 
+        // Same as (l+r)/2, but avoids overflow for 
+        // large l and h 
+        int m = l+(r-l)/2; 
+  
+        // Sort first and second halves 
+        mergeSort(arr, l, m); 
+        mergeSort(arr, m+1, r); 
+  
+        merge(arr, l, m, r); 
+    } 
+} 
+int main()
+{int q,n,r,c;
+	scanf(""%d"",&q);
+	for(int i=0;i<q;i++)
+	{scanf(""%d%d"",&n,&r);
+		int arr[100000]={0};
+		for(int i=0;i<n;i++)
+		{scanf(""%d"",&arr[i]);
+ 		}
+                mergeSort(arr,0,n-1);
+		int set=arr[n-1];
+		c=0;
+		for(int i=n-1;i>=0;i--)
+		{if(set==arr[i])
+			{continue;
+			}
+			else
+			{c++;
+				set=arr[i];
+				if(arr[i]-c*r<=0)
+				{break;
+				}
+				else
+				{
+					continue;
+				}
+			}
+		}
+		printf(""%d\n"",c);
+	}
+	return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62567557,super_zero,"#include<stdio.h>
+int main()
+{int q,n,r,c;
+	scanf(""%d"",&q);
+	for(int i=0;i<q;i++)
+	{scanf(""%d%d"",&n,&r);
+		int arr[100000]={0};
+		for(int i=0;i<n;i++)
+		{scanf(""%d"",&arr[i]);
+		}
+		int set=arr[n-1];
+		c=0;
+		for(int i=n-1;i>=0;i--)
+		{if(set==arr[i])
+			{continue;
+			}
+			else
+			{c++;
+				set=arr[i];
+				if(arr[i]-c*r<=0)
+				{break;
+				}
+				else
+				{
+					continue;
+				}
+			}
+		}
+		printf(""%d\n"",c);
+	}
+	return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62568165,super_zero,"#include<stdio.h>
+void merge(int arr[], int l, int m, int r) 
+{ 
+    int i, j, k; 
+    int n1 = m - l + 1; 
+    int n2 =  r - m; 
+  
+    /* create temp arrays */
+    int L[n1], R[n2]; 
+  
+    /* Copy data to temp arrays L[] and R[] */
+    for (i = 0; i < n1; i++) 
+        L[i] = arr[l + i]; 
+    for (j = 0; j < n2; j++) 
+        R[j] = arr[m + 1+ j]; 
+  
+    /* Merge the temp arrays back into arr[l..r]*/
+    i = 0; // Initial index of first subarray 
+    j = 0; // Initial index of second subarray 
+    k = l; // Initial index of merged subarray 
+    while (i < n1 && j < n2) 
+    { 
+        if (L[i] <= R[j]) 
+        { 
+            arr[k] = L[i]; 
+            i++; 
+        } 
+        else
+        { 
+            arr[k] = R[j]; 
+            j++; 
+        } 
+        k++; 
+    } 
+  
+    /* Copy the remaining elements of L[], if there 
+       are any */
+    while (i < n1) 
+    { 
+        arr[k] = L[i]; 
+        i++; 
+        k++; 
+    } 
+  
+    /* Copy the remaining elements of R[], if there 
+       are any */
+    while (j < n2) 
+    { 
+        arr[k] = R[j]; 
+        j++; 
+        k++; 
+    } 
+} 
+  
+/* l is for left index and r is right index of the 
+   sub-array of arr to be sorted */
+void mergeSort(int arr[], int l, int r) 
+{ 
+    if (l < r) 
+    { 
+        // Same as (l+r)/2, but avoids overflow for 
+        // large l and h 
+        int m = l+(r-l)/2; 
+  
+        // Sort first and second halves 
+        mergeSort(arr, l, m); 
+        mergeSort(arr, m+1, r); 
+  
+        merge(arr, l, m, r); 
+    } 
+} 
+int main()
+{int q,n,r,c;
+	scanf(""%d"",&q);
+	for(int i=0;i<q;i++)
+	{scanf(""%d%d"",&n,&r);
+		int arr[100000]={0};
+		for(int i=0;i<n;i++)
+		{scanf(""%d"",&arr[i]);
+ 		}
+                mergeSort(arr,0,n-1);
+		int set=arr[n-1];
+		c=0;
+		for(int i=n-1;i>=0;i--)
+		{if(set==arr[i])
+			{continue;
+			}
+			else
+			{c++;
+				set=arr[i];
+				if(arr[i]-c*r<=0)
+				{break;
+				}
+				else
+				{if(i==0)
+					{c++;
+					}
+					continue;
+				}
+			}
+		}
+		printf(""%d\n"",c);
+	}
+	return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62521346,halliday_onice,"#include <stdio.h>
+#include <stdlib.h>
+
+int ordem(const void*a,const void*b){
+    int x = *((int*)a);
+    int y = *((int*)b);
+
+        if(x<y)
+            return -1; // nao troca
+        else
+            return 1;
+}
+
+int main(){
+    int v[1234],q,r,n;
+    scanf(""%d"",&q);
+    while(q--){
+        scanf(""%d %d"",&n,&r);
+        for(int i = 0;i < n;i++){
+            scanf(""%d"",&v[i]);
+        }
+
+        qsort(v,n,sizeof(int),ordem);
+        int tiro = 0;
+        for(int i=n-1;i>=0;i--){
+            if(v[i] - tiro*r<=0){
+                break;
+            }else if(i !=n - 1 && v[i]==v[i +1]){
+                continue;
+            }
+            tiro++;
+        }
+    printf(""%d"",tiro);
+
+
+
+    }
+
+
+
+
+return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62430447,Zafirr,"
+
+#include<stdio.h>
+#include<stdlib.h>
+
+int int_cmp(const void *a, const void *b) 
+{ 
+    const int *ia = (const int *)a;
+    const int *ib = (const int *)b;
+    return *ia  - *ib; 
+} 
+
+int main(int argc, char const *argv[])
+{
+	int q;
+	scanf(""%d"", &q);
+	while(q--)	{
+		int n, r;
+		scanf(""%d %d"", &n, &r);
+		int monsters[n];
+		int mx = -1;
+		for (int i = 0; i < n; ++i)
+		{
+			scanf(""%d"", &monsters[i]);
+		}
+
+		int ans = 0;
+		int moved = 0;
+		int prev = -1;
+
+		qsort(monsters, n, sizeof(int), int_cmp);
+		for (int i = n-1; i >= 0; --i)
+		{
+			if(monsters[i] == prev)
+				continue;
+			if(monsters[i] <= moved)
+				break;
+			prev = monsters[i];
+			++ans;
+			moved += r;
+		}
+
+		printf(""%d\n"", ans);
+	}
+	return 0;
+}",B - Kill `Em All,GNU C11,OK,1238
+62430345,Zafirr,"
+
+#include<stdio.h>
+#include<stdlib.h>
+
+int cmp(int a, int b)	{
+	return a-b;
+}
+
+int main(int argc, char const *argv[])
+{
+	int q;
+	scanf(""%d"", &q);
+	while(q--)	{
+		int n, r;
+		scanf(""%d %d"", &n, &r);
+		int monsters[n];
+		int mx = -1;
+		for (int i = 0; i < n; ++i)
+		{
+			scanf(""%d"", &monsters[i]);
+		}
+
+		int ans = 0;
+		int moved = 0;
+		int prev = -1;
+
+		qsort(monsters, n, sizeof(int), cmp);
+		for (int i = n-1; i >= 0; --i)
+		{
+			if(monsters[i] == prev)
+				continue;
+			if(monsters[i] <= moved)
+				break;
+			prev = monsters[i];
+			++ans;
+			moved += r;
+		}
+
+		printf(""%d\n"", ans);
+	}
+	return 0;
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62405738,AFukun,"#include<stdio.h>
+int calc(int n,int s);
+
+int main()
+{
+	int q;
+	scanf(""%d"",&q);
+	for (int i=0;i<q;i++)
+	{
+		short a[100001]={0};
+		int n,s,temp,sum=0,count=0,min=0,max=0;
+		scanf(""%d %d"",&n,&s);
+		
+		
+		
+		
+		for (int i=0;i<n;i++)
+		{
+			scanf(""%d"",&temp);
+			if (a[temp]==0)
+			{
+				a[temp]=1;
+				sum++;
+			if (temp>max)
+				max=temp;
+			if (temp<min)
+				min=temp;
+			}
+			
+		}
+		
+		if (n==1)
+		{
+			printf(""%d\n"",1);
+			goto out;
+		}
+		
+	
+		if (calc(min,s)>=sum)
+		{
+			printf(""%d\n"",sum);
+			goto out;
+		}
+		
+		for (int i=min;i<=max;i++)
+		{
+			if (a[i]==1)
+			{
+				count++;
+				
+				if (calc(i,s)>(sum-count))
+				{
+					printf(""%d\n"",sum-count+1);
+					goto out;
+				}
+			}
+		}
+		out:;
+	}
+			
+			
+	
+	return 0;
+		
+		
+}
+
+int calc(int n,int s)
+{
+	if (n%s)
+		return n/s+1;
+	else
+		return n/s;
+}",B - Kill `Em All,GNU C11,OK,1238
+62404547,AFukun,"#include<stdio.h>
+int calc(int n,int s);
+
+int main()
+{
+	int q;
+	scanf(""%d"",&q);
+	for (int i=0;i<q;i++)
+	{
+		short a[100001]={0};
+		int n,s,temp,sum=0,count=0,max=0;
+		scanf(""%d %d"",&n,&s);
+		
+		for (int i=0;i<n;i++)
+		{
+			scanf(""%d"",&temp);
+			a[temp]=1;	
+			if (temp>max)
+				
+				max=temp;
+		}
+		
+		for (int i=1;i<=max;i++)
+			if (a[i]==1)
+				sum++;
+		//printf(""%d\n"",sum);
+			
+		for (int i=1;i<=max;i++)
+		{
+			if (a[i]==1)
+			{
+				count++;
+				if (count==1)
+					if (calc(i,s)>=sum)
+					{
+						printf(""%d\n"",sum);
+						goto out;
+					}
+				if (calc(i,s)<=(sum-count))
+				{
+					printf(""%d\n"",sum-count);
+					goto out;
+				}
+			}
+		}
+		out:;
+	}
+			
+			
+	
+	return 0;
+		
+		
+}
+
+int calc(int n,int s)
+{
+	if (n%s)
+		return n/s+1;
+	else
+		return n/s;
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62404853,AFukun,"#include<stdio.h>
+int calc(int n,int s);
+
+int main()
+{
+	int q;
+	scanf(""%d"",&q);
+	for (int i=0;i<q;i++)
+	{
+		short a[100001]={0};
+		int n,s,temp,sum=0,count=0,max=0;
+		scanf(""%d %d"",&n,&s);
+		
+		for (int i=0;i<n;i++)
+		{
+			scanf(""%d"",&temp);
+			a[temp]=1;	
+			if (temp>max)
+				
+				max=temp;
+		}
+		
+		for (int i=1;i<=max;i++)
+			if (a[i]==1)
+				sum++;
+		//printf(""%d\n"",sum);
+			
+		for (int i=1;i<=max;i++)
+		{
+			if (a[i]==1)
+			{
+				count++;
+				if (count==1)
+					if (calc(i,s)>=sum)
+					{
+						printf(""%d\n"",sum);
+						goto out;
+					}
+				if (calc(i,s)>=(sum-count))
+				{
+					printf(""%d\n"",sum-count+1);
+					goto out;
+				}
+			}
+		}
+		out:;
+	}
+			
+			
+	
+	return 0;
+		
+		
+}
+
+int calc(int n,int s)
+{
+	if (n%s)
+		return n/s+1;
+	else
+		return n/s;
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62404209,AFukun,"#include<stdio.h>
+int calc(int n,int s);
+
+int main()
+{
+	int q;
+	scanf(""%d"",&q);
+	for (int i=0;i<q;i++)
+	{
+		short a[100001]={0};
+		int n,s,temp,sum=0,count=0,max=0;
+		scanf(""%d %d"",&n,&s);
+		
+		for (int i=0;i<n;i++)
+		{
+			scanf(""%d"",&temp);
+			a[temp]=1;	
+			if (temp>max)
+				
+				max=temp;
+		}
+		
+		for (int i=1;i<=max;i++)
+			if (a[i]==1)
+				sum++;
+		//printf(""%d\n"",sum);
+			
+		for (int i=1;i<=max;i++)
+		{
+			if (a[i]==1)
+			{
+				count++;
+				if (count==1)
+					if (calc(i,s)>=sum)
+						printf(""%d\n"",sum);
+				if (calc(i,s)<=(sum-count))
+				{
+					printf(""%d\n"",sum-count);
+					break;
+				}
+			}
+		}
+	}
+			
+			
+	
+	return 0;
+		
+		
+}
+
+int calc(int n,int s)
+{
+	if (n%s)
+		return n/s+1;
+	else
+		return n/s;
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62404453,AFukun,"#include<stdio.h>
+int calc(int n,int s);
+
+int main()
+{
+	int q;
+	scanf(""%d"",&q);
+	for (int i=0;i<q;i++)
+	{
+		short a[100001]={0};
+		int n,s,temp,sum=0,count=0,max=0;
+		scanf(""%d %d"",&n,&s);
+		
+		for (int i=0;i<n;i++)
+		{
+			scanf(""%d"",&temp);
+			a[temp]=1;	
+			if (temp>max)
+				
+				max=temp;
+		}
+		
+		for (int i=1;i<=max;i++)
+			if (a[i]==1)
+				sum++;
+		//printf(""%d\n"",sum);
+			
+		for (int i=1;i<=max;i++)
+		{
+			if (a[i]==1)
+			{
+				count++;
+				if (count==1)
+					if (calc(i,s)>=sum)
+					{
+						printf(""%d\n"",sum);
+						break;
+					}
+				if (calc(i,s)<=(sum-count))
+				{
+					printf(""%d\n"",sum-count);
+					break;
+				}
+			}
+		}
+	}
+			
+			
+	
+	return 0;
+		
+		
+}
+
+int calc(int n,int s)
+{
+	if (n%s)
+		return n/s+1;
+	else
+		return n/s;
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62403881,AFukun,"#include<stdio.h>
+int calc(int n,int s);
+
+int main()
+{
+	int q;
+	scanf(""%d"",&q);
+	for (int i=0;i<q;i++)
+	{
+		short a[100001]={0};
+		int n,s,temp,sum=0,count=0,max=0;
+		scanf(""%d %d"",&n,&s);
+		
+		for (int i=0;i<n;i++)
+		{
+			scanf(""%d"",&temp);
+			a[temp]=1;	
+			if (temp>max)
+				
+				max=temp;
+		}
+		
+		for (int i=1;i<=max;i++)
+			if (a[i]==1)
+				sum++;
+		//printf(""%d\n"",sum);
+			
+		for (int i=1;i<=max;i++)
+		{
+			if (a[i]==1)
+			{
+				count++;
+				if (calc(i,s)<=(sum-count))
+				{
+					printf(""%d\n"",sum-count);
+					break;
+				}
+			}
+		}
+	}
+			
+			
+	
+	return 0;
+		
+		
+}
+
+int calc(int n,int s)
+{
+	if (n%s)
+		return n/s+1;
+	else
+		return n/s;
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62402864,AFukun,"#include<stdio.h>
+int findmax(int*a,int n);
+
+int main()
+{
+	int q;
+	scanf(""%d"",&q);
+	static int a[100000]={0};
+	
+	for (int i=0;i<q;i++)
+	{
+		int n,s,max,count=0;
+		scanf(""%d %d"",&n, &s);
+		for (int i=0;i<n;i++)
+			scanf(""%d"",&a[i]);
+		while((max=findmax(a,n))!=-1)
+		{
+			count++;
+			for (int i=0;i<n;i++)
+				if (a[i])
+					a[i]-=s;
+			a[max]=0;
+		}
+		printf(""%d\n"",count);
+	}
+	return 0;
+}
+
+int findmax(int*a,int n)
+{
+	int temp=0;
+	for (int i=0;i<n;i++)
+	{
+		if (a[temp]<a[i])
+			temp=i;
+	}
+	if (a[temp]==0)
+		return -1;
+	else return temp;
+}
+		
+			
+		",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62333091,Hridoy23,"#include<stdio.h>
+int cmpfunc (const void * a, const void * b) {
+   return ( *(int*)a - *(int*)b );
+}
+	
+int main()
+{
+	int q,n,r;
+	int a[100000];
+	int i,j,t,p;
+	scanf(""%d"",&q);
+    while(q--){
+    	scanf(""%d%d"",&n,&r);
+    	for(i=0;i<n;i++)
+    	{
+    		scanf(""%d"",&a[i]);
+    	}
+    	qsort(a,n,sizeof(int),cmpfunc);
+    	j=0;
+    	for(i=0;i<n;i++)
+    	{
+    		if(a[i]!=a[i-1]&&i!=0)
+    		a[j++]=a[i-1];
+    		if(i==n-1)
+    		a[j++]=a[n-1];
+    	}
+    	n=j;
+    	j=1;
+    	t=0;
+    	for(i=n-2;i>=0;i--)
+    	{
+    		p=a[i]/r;
+    		if(a[i]%r>0)
+    		p++;
+    		if(p<=j){
+    			t=1;
+    			printf(""%d\n"",j);
+    			break;
+    		}
+    		j++;
+    	}
+	if(t==0)
+	printf(""%d\n"",n);
+    }
+	
+	return 0;
+	
+}",B - Kill `Em All,GNU C11,OK,1238
+62332974,Hridoy23,"#include<stdio.h>
+int cmpfunc (const void * a, const void * b) {
+   return ( *(int*)a - *(int*)b );
+}
+	
+int main()
+{
+	int q,n,r;
+	int a[100000];
+	int i,j,t,p;
+	scanf(""%d"",&q);
+    while(q--){
+    	scanf(""%d%d"",&n,&r);
+    	for(i=0;i<n;i++)
+    	{
+    		scanf(""%d"",&a[i]);
+    	}
+    	qsort(a,n,sizeof(int),cmpfunc);
+    	j=0;
+    	for(i=1;i<n;i++)
+    	{
+    		if(a[i]!=a[i-1])
+    		a[j++]=a[i-1];
+    		if(i==n-1)
+    		a[j++]=a[n-1];
+    	}
+    	n=j;
+    	j=1;
+    	t=0;
+    	for(i=n-2;i>=0;i--)
+    	{
+    		p=a[i]/r;
+    		if(a[i]%r>0)
+    		p++;
+    		if(p<=j){
+    			t=1;
+    			printf(""%d\n"",j);
+    			break;
+    		}
+    		j++;
+    	}
+	if(t==0)
+	printf(""%d\n"",n);
+    }
+	
+	return 0;
+	
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62332888,Hridoy23,"#include<stdio.h>
+int cmpfunc (const void * a, const void * b) {
+   return ( *(int*)a - *(int*)b );
+}
+	
+int main()
+{
+	int q,n,r;
+	int a[100000],b[100000];
+	int i,j,t;
+	scanf(""%d"",&q);
+    while(q--){
+    	scanf(""%d%d"",&n,&r);
+    	for(i=0;i<n;i++)
+    	{
+    		scanf(""%d"",&a[i]);
+    	}
+    	qsort(a,n,sizeof(int),cmpfunc);
+    	j=0;
+    	for(i=1;i<n;i++)
+    	{
+    		if(a[i]!=a[i-1])
+    		a[j++]=a[i-1];
+    		if(i==n-1)
+    		a[j++]=a[n-1];
+    	}
+    	n=j;
+    	j=1;
+    	t=0;
+    	for(i=n-2;i>=0;i--)
+    	{
+    		if(a[i]/r<=j){
+    			t=1;
+    			printf(""%d\n"",j);
+    			break;
+    		}
+    		j++;
+    	}
+	if(t==0)
+	printf(""%d\n"",n);
+    }
+	
+	return 0;
+	
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62215261,patilc125,"#include <stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<math.h>
+long long cmpfunc (const void * a, const void * b) {
+   return ( *(long long*)a - *(long long*)b );
+}
+
+
+int main(void){
+   
+long long int test,i,j,n,count,flag=0,o1=0,o2=0,x,m,l,max,sum2,min,f,c,r,o,sum1,sum=0,y,count1=0,a2,b2;
+
+
+scanf(""%lld"",&test);
+while(test--){
+scanf(""%lld%lld"",&n,&c);
+long long int a[100000]={0},b[100000]={0};
+count=0;
+for(i=0;i<n;i++){
+    scanf(""%lld"",&a2);
+    if(a[a2]==0){
+        b[count++]=a2;
+        a[a2]=1;
+    }
+}
+sum=0;
+flag=0;
+qsort(b,count,sizeof(long long int),cmpfunc);
+for(i=count-1;i>=0;i--){
+    if(b[i]-sum<=0){
+        printf(""%lld\n"",count-i-1);
+        flag=1;
+        break;
+    }else{
+        sum+=c;
+        
+    }
+}
+if(flag==0){
+    printf(""%lld\n"",count);
+}
+}
+return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62215231,patilc125,"#include <stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<math.h>
+long long cmpfunc (const void * a, const void * b) {
+   return ( *(long long*)a - *(long long*)b );
+}
+
+
+int main(void){
+   
+long long int test,i,j,n,count,flag=0,o1=0,o2=0,x,m,l,max,sum2,min,f,c,r,o,sum1,sum=0,y,count1=0,a2,b2;
+
+
+scanf(""%lld"",&test);
+while(test--){
+scanf(""%lld%lld"",&n,&c);
+long long int a[100000]={0},b[100000]={0};
+count=0;
+for(i=0;i<n;i++){
+    scanf(""%lld"",&a2);
+    if(a[a2]==0){
+        b[count++]=a2;
+        a[a2]=1;
+    }
+}
+sum=0;
+flag=0;
+qsort(b,count,sizeof(long long int),cmpfunc);
+for(i=count-1;i>=0;i--){
+    if(b[i]-sum<=0){
+        printf(""%lld\n"",count-i-1);
+        flag=1;
+        break;
+    }else{
+        sum+=c;
+        
+    }
+}
+if(flag==0){
+    printf(""%lld"",count);
+}
+}
+return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62215044,patilc125,"#include <stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<math.h>
+long long cmpfunc (const void * a, const void * b) {
+   return ( *(long long*)a - *(long long*)b );
+}
+
+
+int main(void){
+   
+long long int test,i,j,n,count,flag=0,o1=0,o2=0,x,m,l,max,sum2,min,f,c,r,o,sum1,sum=0,y,count1=0,a2,b2;
+
+
+scanf(""%lld"",&test);
+while(test--){
+scanf(""%lld%lld"",&n,&c);
+long long int a[100000]={0},b[100000]={0};
+count=0;
+for(i=0;i<n;i++){
+    scanf(""%lld"",&a2);
+    if(a[a2]==0){
+        b[count++]=a2;
+        a[a2]=1;
+    }
+}
+sum=0;
+qsort(b,count,sizeof(long long int),cmpfunc);
+for(i=count-1;i>=0;i--){
+    if(b[i]-sum<=0){
+        printf(""%lld\n"",count-i-1);
+        break;
+    }else{
+        sum+=c;
+        
+    }
+}
+}
+return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62206905,vlad9i2,"    #include <stdio.h>
+    #include <stdlib.h>
+    #include <unistd.h>
+    #include <ctype.h>
+    #include <fcntl.h>
+    #include <sys/types.h>
+    #include <sys/file.h>
+    #include <sys/stat.h>
+    #include <limits.h>
+
+static void QuickSort (int *a, int left, int right) {      // dlya vvoda 0 i n - 1
+    int comp, tmp, i, j;
+    i = left; j = right;
+    comp = a[(left + right)/2];
+    do {
+        while (a[i] > comp && i < right)
+            i++;
+        while (comp > a[j] && j > left)
+            j--;
+        if (i <= j) {
+            tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+            i++, j--;
+            }
+    } while (i <= j);
+    if (left < j)
+        QuickSort (a, left, j);
+    if (i < right)
+        QuickSort (a, i, right);
+}
+    int main(void)
+    {
+        int q, n, r;
+        scanf(""%d"", &q);
+        int count;
+        for(int i = 0; i < q; ++i) {
+            scanf(""%d%d"", &n, &r);
+            int *x = calloc(n, sizeof(int));
+            for(int j = 0; j < n; ++j) {
+                scanf(""%d"", &x[j]);
+            }
+            QuickSort(x, 0, n - 1);
+            count = 0;
+            int max;
+            int k = 0;
+            while(k < n && x[k] - count * r > 0) {
+                count++;
+                max = x[k];
+                while(k < n && x[k] == max) {
+                    k++;
+                }
+            }
+            free(x);
+            printf(""%d\n"", count);
+        }
+        return 0;
+    }",B - Kill `Em All,GNU C11,OK,1238
+62206651,vlad9i2,"    #include <stdio.h>
+    #include <stdlib.h>
+    #include <unistd.h>
+    #include <ctype.h>
+    #include <fcntl.h>
+    #include <sys/types.h>
+    #include <sys/file.h>
+    #include <sys/stat.h>
+    #include <limits.h>
+
+static void QuickSort (int *a, int left, int right) {      // dlya vvoda 0 i n - 1
+    int comp, tmp, i, j;
+    i = left; j = right;
+    comp = a[(left + right)/2];
+    do {
+        while (a[i] > comp && i < right)
+            i++;
+        while (comp > a[j] && j > left)
+            j--;
+        if (i <= j) {
+            tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+            i++, j--;
+            }
+    } while (i <= j);
+    if (left < j)
+        QuickSort (a, left, j);
+    if (i < right)
+        QuickSort (a, i, right);
+}
+    int main(void)
+    {
+        int q, n, r;
+        scanf(""%d"", &q);
+        int count;
+        for(int i = 0; i < q; ++i) {
+            scanf(""%d%d"", &n, &r);
+            int *x = calloc(100000, sizeof(int));
+            for(int j = 0; j < n; ++j) {
+                scanf(""%d"", &x[j]);
+            }
+            QuickSort(x, 0, n - 1);
+            count = 0;
+            int max;
+            while(i < n && x[i] - count * r > 0) {
+                count++;
+                max = x[i];
+                while(i < n && x[i] == max) {
+                    i++;
+                }
+            }
+            free(x);
+            printf(""%d\n"", count);
+        }
+        return 0;
+    }",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62206240,vlad9i2,"    #include <stdio.h>
+    #include <stdlib.h>
+    #include <unistd.h>
+    #include <ctype.h>
+    #include <fcntl.h>
+    #include <sys/types.h>
+    #include <sys/file.h>
+    #include <sys/stat.h>
+    #include <limits.h>
+
+static void QuickSort (int *a, int left, int right) {      // dlya vvoda 0 i n - 1
+    int comp, tmp, i, j;
+    i = left; j = right;
+    comp = a[(left + right)/2];
+    do {
+        while (a[i] > comp && i < right)
+            i++;
+        while (comp > a[j] && j > left)
+            j--;
+        if (i <= j) {
+            tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+            i++, j--;
+            }
+    } while (i <= j);
+    if (left < j)
+        QuickSort (a, left, j);
+    if (i < right)
+        QuickSort (a, i, right);
+}
+    int main(void)
+    {
+        int q, n, r;
+        scanf(""%d"", &q);
+        int *x = calloc(100000, sizeof(int));
+        int count;
+        for(int i = 0; i < q; ++i) {
+            scanf(""%d%d"", &n, &r);
+            for(int j = 0; j < n; ++j) {
+                scanf(""%d"", &x[j]);
+            }
+            QuickSort(x, 0, n - 1);
+            count = 0;
+            int flag = 1;
+            int max;
+            while(i < n && x[i] - count * r > 0) {
+                count++;
+                max = x[i];
+                while(i < n && x[i] == max) {
+                    i++;
+                }
+            }
+            printf(""%d\n"", count);
+        }
+        free(x);
+    }",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62206120,vlad9i2,"    #include <stdio.h>
+    #include <stdlib.h>
+    #include <unistd.h>
+    #include <ctype.h>
+    #include <fcntl.h>
+    #include <sys/types.h>
+    #include <sys/file.h>
+    #include <sys/stat.h>
+    #include <limits.h>
+
+static void QuickSort (int *a, int left, int right) {      // dlya vvoda 0 i n - 1
+    int comp, tmp, i, j;
+    i = left; j = right;
+    comp = a[(left + right)/2];
+    do {
+        while (a[i] > comp && i < right)
+            i++;
+        while (comp > a[j] && j > left)
+            j--;
+        if (i <= j) {
+            tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+            i++, j--;
+            }
+    } while (i <= j);
+    if (left < j)
+        QuickSort (a, left, j);
+    if (i < right)
+        QuickSort (a, i, right);
+}
+    int main(void)
+    {
+        int q, n, r;
+        scanf(""%d"", &q);
+        int *x = calloc(100000, sizeof(int));
+        int count;
+        for(int i = 0; i < q; ++i) {
+            scanf(""%d%d"", &n, &r);
+            for(int j = 0; j < n; ++j) {
+                scanf(""%d"", &x[j]);
+            }
+            QuickSort(x, 0, n - 1);
+            count = 0;
+            int flag = 1;
+            int max;
+            while(x[i] - count * r > 0 && i < n) {
+                count++;
+                max = x[i];
+
+                while(x[i] == max && i < n) {
+                    i++;
+                }
+            }
+            printf(""%d\n"", count);
+        }
+        free(x);
+    }",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62206008,vlad9i2,"    #include <stdio.h>
+    #include <stdlib.h>
+    #include <unistd.h>
+    #include <ctype.h>
+    #include <fcntl.h>
+    #include <sys/types.h>
+    #include <sys/file.h>
+    #include <sys/stat.h>
+    #include <limits.h>
+
+static void QuickSort (int *a, int left, int right) {      // dlya vvoda 0 i n - 1
+    int comp, tmp, i, j;
+    i = left; j = right;
+    comp = a[(left + right)/2];
+    do {
+        while (a[i] > comp && i < right)
+            i++;
+        while (comp > a[j] && j > left)
+            j--;
+        if (i <= j) {
+            tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+            i++, j--;
+            }
+    } while (i <= j);
+    if (left < j)
+        QuickSort (a, left, j);
+    if (i < right)
+        QuickSort (a, i, right);
+}
+    int main(void)
+    {
+        int q, n, r;
+        scanf(""%d"", &q);
+        int *x = calloc(100000, sizeof(int));
+        int count;
+        for(int i = 0; i < q; ++i) {
+            scanf(""%d%d"", &n, &r);
+            for(int j = 0; j < n; ++j) {
+                scanf(""%d"", &x[j]);
+            }
+            QuickSort(x, 0, n - 1);
+            count = 0;
+            int flag = 1;
+            int max;
+            while(x[i] - count * r > 0) {
+                count++;
+                max = x[i];
+                while(x[i] == max && i < n) {
+                    i++;
+                }
+            }
+            printf(""%d\n"", count);
+        }
+        free(x);
+    }",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62205659,vlad9i2,"    #include <stdio.h>
+    #include <stdlib.h>
+    #include <unistd.h>
+    #include <ctype.h>
+    #include <fcntl.h>
+    #include <sys/types.h>
+    #include <sys/file.h>
+    #include <sys/stat.h>
+    #include <limits.h>
+
+static void QuickSort (int *a, int left, int right) {      // dlya vvoda 0 i n - 1
+    int comp, tmp, i, j;
+    i = left; j = right;
+    comp = a[(left + right)/2];
+    do {
+        while (a[i] > comp && i < right)
+            i++;
+        while (comp > a[j] && j > left)
+            j--;
+        if (i <= j) {
+            tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+            i++, j--;
+            }
+    } while (i <= j);
+    if (left < j)
+        QuickSort (a, left, j);
+    if (i < right)
+        QuickSort (a, i, right);
+}
+    int main(void)
+    {
+        int q, n, r;
+        scanf(""%d"", &q);
+        int *x = calloc(100000, sizeof(int));
+        int count;
+        for(int i = 0; i < q; ++i) {
+            scanf(""%d%d"", &n, &r);
+            for(int j = 0; j < n; ++j) {
+                scanf(""%d"", &x[j]);
+            }
+            QuickSort(x, 0, n - 1);
+            count = 1;
+            int flag = 1;
+            int max;
+            for(int i = 0; i < n; ++i) {
+                if(x[i] - count * r < 0) {
+                    break;
+                }
+                max = x[i];
+                while(x[i] == max && i < n) {
+                    i++;
+                }
+                if(i < n) count ++;
+            }
+            printf(""%d\n"", count);
+        }
+        free(x);
+    }",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62205212,vlad9i2,"    #include <stdio.h>
+    #include <stdlib.h>
+    #include <unistd.h>
+    #include <ctype.h>
+    #include <fcntl.h>
+    #include <sys/types.h>
+    #include <sys/file.h>
+    #include <sys/stat.h>
+    #include <limits.h>
+
+static void QuickSort (int *a, int left, int right) {      // dlya vvoda 0 i n - 1
+    int comp, tmp, i, j;
+    i = left; j = right;
+    comp = a[(left + right)/2];
+    do {
+        while (a[i] > comp && i < right)
+            i++;
+        while (comp > a[j] && j > left)
+            j--;
+        if (i <= j) {
+            tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+            i++, j--;
+            }
+    } while (i <= j);
+    if (left < j)
+        QuickSort (a, left, j);
+    if (i < right)
+        QuickSort (a, i, right);
+}
+    int main(void)
+    {
+        int q, n, r;
+        scanf(""%d"", &q);
+        int *x = calloc(100000, sizeof(int));
+        int count;
+        for(int i = 0; i < q; ++i) {
+            scanf(""%d%d"", &n, &r);
+            for(int j = 0; j < n; ++j) {
+                scanf(""%d"", &x[j]);
+            }
+            QuickSort(x, 0, n - 1);
+            count = 0;
+            int flag = 1;
+            int max;
+            for(int i = 0; i < n; ++i) {
+                if(x[i] < 0) {
+                    break;
+                }
+                count++;
+                max = x[i];
+                while(x[i] == max && i < n) {
+                    i++;
+                }
+                x[i] -= r;
+            }
+            printf(""%d\n"", count);
+        }
+        free(x);
+    }",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62204992,vlad9i2,"    #include <stdio.h>
+    #include <stdlib.h>
+    #include <unistd.h>
+    #include <ctype.h>
+    #include <fcntl.h>
+    #include <sys/types.h>
+    #include <sys/file.h>
+    #include <sys/stat.h>
+    #include <limits.h>
+
+static void QuickSort (int *a, int left, int right) {      // dlya vvoda 0 i n - 1
+    int comp, tmp, i, j;
+    i = left; j = right;
+    comp = a[(left + right)/2];
+    do {
+        while (a[i] > comp && i < right)
+            i++;
+        while (comp > a[j] && j > left)
+            j--;
+        if (i <= j) {
+            tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+            i++, j--;
+            }
+    } while (i <= j);
+    if (left < j)
+        QuickSort (a, left, j);
+    if (i < right)
+        QuickSort (a, i, right);
+}
+    int main(void)
+    {
+        int q, n, r;
+        scanf(""%d"", &q);
+        int *x = calloc(100000, sizeof(int));
+        int count;
+        for(int i = 0; i < q; ++i) {
+            scanf(""%d%d"", &n, &r);
+            for(int j = 0; j < n; ++j) {
+                scanf(""%d"", &x[j]);
+            }
+            QuickSort(x, 0, n - 1);
+            count = 0;
+            int flag = 1;
+            int max;
+            for(int i = 0; i < n; ++i) {
+                if(x[i] < 0) {
+                    break;
+                }
+                count++;
+                max = x[i];
+                while(x[i] == max && i < n) {
+                    i++;
+                }
+                x[i] -= r;
+                i--;
+            }
+            printf(""%d\n"", count);
+        }
+        free(x);
+    }",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62201973,Wrong_Wizzli,"#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <ctype.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <time.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+static 
+void QuickSort (int *a, int left, int right) {      // dlya vvoda 0 i n - 1
+    int comp, tmp, i, j;
+    i = left; j = right;
+    comp = a[(left + right)/2];
+    do {
+        while (a[i] < comp && i < right)
+            i++;
+        while (comp < a[j] && j > left)
+            j--;
+        if (i <= j) {
+            tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+            i++, j--;
+            }
+    } while (i <= j);
+    if (left < j)
+        QuickSort (a, left, j);
+    if (i < right)
+        QuickSort (a, i, right);
+}
+int
+main (void)
+{
+    int total;
+    scanf(""%d"", &total);
+    for (int i = 0; i < total; i++) {
+        int qnt, off, cnt = 0;
+        scanf(""%d%d"", &qnt, &off);
+        int *a = calloc(qnt, sizeof(*a));
+        for (int j = 0; j < qnt; j++) {
+            scanf(""%d"", &a[j]);
+        }
+        QuickSort(a, 0, qnt - 1);
+        qnt--;
+        while (qnt >= 0) {
+            if(a[qnt] - off * cnt <= 0) {
+                break;
+            }
+            cnt++;
+            int temp = a[qnt];
+            while(a[qnt] == temp){
+                qnt--;
+            }
+        }
+        printf(""%d\n"", cnt);
+    }
+    return 0;
+}",B - Kill `Em All,GNU C11,OK,1238
+62201883,Wrong_Wizzli,"#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+static void QuickSort (int *a, int left, int right) {      // dlya vvoda 0 i n - 1
+    int comp, tmp, i, j;
+    i = left; j = right;
+    comp = a[(left + right)/2];
+    do {
+        while (a[i] < comp && i < right)
+            i++;
+        while (comp < a[j] && j > left)
+            j--;
+        if (i <= j) {
+            tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+            i++, j--;
+            }
+    } while (i <= j);
+    if (left < j)
+        QuickSort (a, left, j);
+    if (i < right)
+        QuickSort (a, i, right);
+}
+
+
+int main(void)
+{
+    int n;
+    scanf(""%d"", &n);
+    int a[n];
+    for (int i = 0; i < n; i++)
+    {
+        scanf(""%d"", &a[i]);
+    }
+    QuickSort(a, 0, n - 1);
+    for (int i = 0; i < n ; i++)
+    {
+        printf(""%d "", a[i]);
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62189867,MOHIR_MBSTU,"#include<stdio.h>
+int main()
+{
+    int a,b,c,d,i,j,k;
+    scanf(""%d"",&a);
+    for(i=0; i<a; i++)
+    {
+        scanf(""%d%d"",&b,&c);
+        int ar[b+1];
+        for(j=1; j<=b; j++)
+        {
+            scanf(""%d"",&ar[j]);
+        }
+        ar[0]=0;
+        for(j=1; j<=b; j++)
+        {
+            for(k=j+1; k<=b; k++)
+            {
+                if(ar[j]>ar[k])
+                {
+                    c=ar[j];
+                    ar[j]=ar[k];
+                    ar[k]=c;
+                }
+            }
+        }
+        int cnt=1,n=0,m=ar[b]-c;
+        for(j=b; j>0; j--)
+        {
+            ar[j]-=(cnt*c);
+            if (ar[j]<=0)
+            {
+                break;
+            }
+            if (m==ar[j])
+            {
+                continue;
+            }
+            else
+            {
+                m=ar[j]-c;
+                cnt++;
+            }
+        }
+        printf(""%d\n"",cnt);
+    }
+
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62167924,rainboy,"/* practice with Dukkha */
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/time.h>
+
+#define N	100000
+
+void srand_() {
+	struct timeval tv;
+
+	gettimeofday(&tv, NULL);
+	srand(tv.tv_sec ^ tv.tv_usec);
+}
+
+int rand_(int n) {
+	return (rand() * 76543LL + rand()) % n;
+}
+
+int compare(const void *a, const void *b) {
+	int ia = *(int *) a;
+	int ib = *(int *) b;
+
+	return ia - ib;
+}
+
+void sort(int *aa, int n) {
+	int i;
+
+	for (i = 0; i < n; i++) {
+		int j = rand_(i + 1), tmp;
+
+		tmp = aa[i], aa[i] = aa[j], aa[j] = tmp;
+	}
+	qsort(aa, n, sizeof *aa, compare);
+}
+
+int main() {
+	int q;
+
+	srand_();
+	scanf(""%d"", &q);
+	while (q--) {
+		static int xx[N];
+		int n, r, i, k;
+
+		scanf(""%d%d"", &n, &r);
+		for (i = 0; i < n; i++)
+			scanf(""%d"", &xx[i]);
+		sort(xx, n);
+		k = 0;
+		for (i = n - 1; i >= 0 && xx[i] - k * r > 0; i--) {
+			while (i > 0 && xx[i - 1] == xx[i])
+				i--;
+			k++;
+		}
+		printf(""%d\n"", k);
+	}
+	return 0;
+}
+",B - Kill `Em All,GNU C11,OK,1238
+62168875,kaiboy,"/* https://codeforces.com/contest/1238/submission/62167924 (rainboy) */
+#include <stdio.h>
+#include <stdlib.h>
+
+#define N 100000
+
+int compare(const void *a, const void *b) {
+	int ia = *(int *) a;
+	int ib = *(int *) b;
+
+	return ia - ib;
+}
+
+int main() {
+	int q;
+
+	scanf(""%d"", &q);
+	while (q--) {
+		static int xx[N];
+		int n, r, i, k;
+
+		scanf(""%d%d"", &n, &r);
+		for (i = 0; i < n; i++)
+			scanf(""%d"", &xx[i]);
+		qsort(xx, n, sizeof *xx, compare);
+		k = 0;
+		for (i = n - 1; i >= 0 && xx[i] - k * r > 0; i--) {
+			while (i > 0 && xx[i - 1] == xx[i])
+				i--;
+			k++;
+		}
+		printf(""%d\n"", k);
+	}
+	return 0;
+}
+",B - Kill `Em All,GNU C11,OK,1238
+62154187,jschr,"#include<stdio.h>
+#include<stdlib.h>
+
+int comp(const void * a, const void * b){
+	return *((int*)b)-*((int*)a);
+}
+
+int x[100000];
+
+int solve(){
+	int n, i, r, j, prev=1000000;
+	scanf(""%d %d"", &n, &r);
+	for(i=0;i<n;++i) scanf(""%d"", x+i);
+	qsort(x, n, sizeof(int), comp);
+	for(j=0,i=0;i<n;++i){
+		if(prev==x[i]) continue;
+		if(r*j>=x[i]) return j;
+		prev=x[i];
+		++j;
+	}
+	return j;
+}
+
+int main(){
+	int q;
+	scanf(""%d"", &q);
+	while(q--) printf(""%d\n"", solve());
+	return 0;
+}
+",B - Kill `Em All,GNU C11,OK,1238
+62144360,bryan303,"#include <stdio.h>
+
+int com (const int * a , const int *b){
+    return *a-*b;
+}
+
+int main(){
+    int q;
+    scanf(""%d"",&q);
+    while(q--){
+        int n,r;
+        scanf(""%d %d"",&n,&r);
+        int a[n];
+        for(int j = 0 ; j < n ;j++){
+            scanf(""%d"",&a[j]);
+        }
+        qsort(a,n,sizeof(int),com);
+        int hasil = 0;
+        char notFinished = 1;
+        int max = n -1;
+        int curr = 0;
+        while(notFinished){
+            int temp = a[max];
+            /*if(max==-1){
+                notFinished=0;
+            }*/
+            int i;
+            for(i = max-1 ; i >=0 ; i--){
+                if(a[i]!=a[max]){
+                    max=i;
+                    break;
+                }
+            }
+            //printf(""max%d %d\n"",max,a[max]);
+            curr+=r;
+            if(i==-1||curr>=a[max]){
+                notFinished = 0;
+            }
+            hasil+=1;
+        }
+        printf(""%d\n"",hasil);
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    return 0;
+}
+",B - Kill `Em All,GNU C11,OK,1238
+62140995,pengin_2000,"#include<stdio.h>
+int h[100005], l;
+void f1(int n)
+{
+	h[l] = n;
+	int now = l;
+	l++;
+	while (now > 0)
+	{
+		if (h[(now - 1) / 2] > h[now])
+		{
+			int f = h[now];
+			h[now] = h[(now - 1) / 2];
+			h[(now - 1) / 2] = f;
+		}
+		now = (now - 1) / 2;
+	}
+	return;
+}
+int f2()
+{
+	int res = h[0];
+	l--;
+	h[0] = h[l];
+	int now = 0;
+	for (;;)
+	{
+		if (2 * now + 2 < l)
+		{
+			if (h[2 * now + 1] < h[2 * now + 2])
+			{
+				if (h[now] > h[2 * now + 1])
+				{
+					int f = h[now];
+					h[now] = h[2 * now + 1];
+					h[2 * now + 1] = f;
+				}
+				now = 2 * now + 1;
+			}
+			else
+			{
+				if (h[now] > h[2 * now + 2])
+				{
+					int f = h[now];
+					h[now] = h[2 * now + 2];
+					h[2 * now + 2] = f;
+				}
+				now = 2 * now + 2;
+			}
+		}
+		else if (2 * now + 1 < l)
+		{
+			if (h[now] > h[2 * now + 1])
+			{
+				int f = h[now];
+				h[now] = h[2 * now + 1];
+				h[2 * now + 1] = f;
+			}
+			now = 2 * now + 1;
+		}
+		else
+			break;
+	}
+	return res;
+}
+int main()
+{
+	int q;
+	scanf(""%d"", &q);
+	int i, j;
+	int n, r, m;
+	int x[100005];
+	int min, mid, max;
+	for (j = 0; j < q; j++)
+	{
+		scanf(""%d %d"", &n, &r);
+		for (i = 0; i < n; i++)
+			scanf(""%d"", &x[i]);
+		l = 0;
+		for (i = 0; i < n; i++)
+			f1(x[i]);
+		x[0] = f2();
+		m = 1;
+		for (i = 1; i < n; i++)
+		{
+			x[m] = f2();
+			if (x[m] != x[m - 1])
+				m++;
+		}
+		min = 0;
+		max = m;
+		while (max - min > 1)
+		{
+			mid = (max + min) / 2;
+			if (x[m - mid - 1] <= r * mid)
+				max = mid;
+			else
+				min = mid;
+		}
+		printf(""%d\n"", max);
+	}
+	return 0;
+}",B - Kill `Em All,GNU C11,OK,1238
+62135754,YOK,"#include <stdio.h>
+long long sX[100001];
+long long dX[100001];
+long long temp[100001];
+int tC;
+void mS(long long s[], long long d[], int o, int t)
+{
+    int i, j, k;
+    int c = (o + t) / 2;
+    if (o < c)
+    {
+        mS(d, s, o, c);
+    }
+    if (c + 1 < t)
+    {
+        mS(d, s, c + 1, t);
+    }
+    i = o;
+    j = c + 1;
+    k = o;
+    while (i <= c && j <= t)
+    {
+        if (s[i] > s[j])
+        {
+            d[k] = s[i];
+            i++;
+        }
+        else
+        {
+            d[k] = s[j];
+            j++;
+        }
+        k++;
+    }
+    while (i <= c)
+    {
+        d[k] = s[i];
+        i++;
+        k++;
+    }
+    while (j <= t)
+    {
+        d[k] = s[j];
+        j++;
+        k++;
+    }
+}
+int main()
+{
+    int i;
+    int Q;
+    int n;
+    long long r;
+    long long c;
+    long long R;
+    scanf(""%d"", &Q);
+    while (Q--)
+    {
+        scanf(""%d %I64d"", &n, &r);
+        c = 1;
+        for (i = 0; i < n; i++)
+        {
+            scanf(""%I64d"", &sX[i]);
+        }
+        for (i = 0; i < n; i++)
+        {
+            dX[i] = sX[i];
+        }
+        mS(sX, dX, 0, n - 1);
+        temp[0] = dX[0];
+        tC = 1;
+        for (i = 1; i < n; i++)
+        {
+            if (dX[i - 1] > dX[i])
+            {
+                temp[tC] = dX[i];
+                tC++;
+            }
+        }
+        temp[tC] = 0;
+        for (R = 0; temp[R] > 0; R++)
+        {
+            temp[R + 1] -= c * r;
+            c++;
+        }
+        printf(""%I64d\n"", R);
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,OK,1238
+62128670,Chipe1,"#include<stdio.h>
+#include<stdlib.h>
+
+int arr[100005], n, r;
+
+int cmpfn(const void *_a, const void *_b){
+  int *a = (int *)_a;
+  int *b = (int *)_b;
+  return (*b) - (*a);
+}
+
+int main(){
+  int q;
+  scanf(""%d"", &q);
+  while(q--){
+    int i;
+    scanf(""%d %d"", &n, &r);
+    for(i = 0;i < n;i++)scanf(""%d"", arr + i);
+    qsort(arr, n, sizeof(int), cmpfn);
+    int ans = 0;
+    i = 0;
+    while(i < n){
+      if(arr[i] <= r*1ll*ans)break;
+      ans++;
+      while(i+1 < n && arr[i] == arr[i + 1])i++;
+      i++;
+    }
+    printf(""%d\n"", ans);
+    //    for(i = 0;i < n;i++)printf(""%d "", arr[i]);printf(""\n"");
+  }
+  return 0;
+}
+",B - Kill `Em All,GNU C11,OK,1238
+62168842,kaiboy,"/* https://codeforces.com/contest/1238/submission/62167924 (rainboy) */
+#include <stdio.h>
+#include <stdlib.h>
+
+#define N 100000
+
+int compare(const void *a, const void *b) {
+	int ia = *(int *) a;
+	int ib = *(int *) b;
+
+	return ia - ib;
+}
+
+int main() {
+	int q;
+
+	scanf(""%d"", &q);
+	while (q--) {
+		static int xx[N];
+		int n, r, i, j, k;
+
+		scanf(""%d%d"", &n, &r);
+		for (i = 0; i < n; i++)
+			scanf(""%d"", &xx[i]);
+		qsort(xx, n, sizeof *xx, compare);
+		k = 0;
+		for (i = n - 1; i >= 0 && xx[i] - k * r > 0; ) {
+			j = i;
+			while (i > 0 && xx[j] == xx[i])
+				j--;
+			i = j;
+			k++;
+		}
+		printf(""%d\n"", k);
+	}
+	return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62165659,Hridoy23,"#include<stdio.h>
+int main()
+{
+	int q,n,r,a[100000],i,j,k,t;
+	int p,b[100000];
+	scanf(""%d"",&q);
+	while(q--)
+	{
+		scanf(""%d%d"",&n,&r);
+		for(i=0;i<n;i++)
+		{
+			scanf(""%d"",&a[i]);
+		}
+		for(i=0;i<n-1;i++)
+		{
+			for(j=i+1;j<n;j++)
+			{
+				if(a[i]>a[j])
+				{
+					p=a[i];
+					a[i]=a[j];
+					a[j]=p;
+				}
+			}
+		}
+			for(i=0,k=0;i<n-1;i++,k++)
+			{
+				b[k]=a[i];
+				for(j=i+1;j<n;j++)
+				{
+					if(a[i]!=a[j])
+					break;
+				}
+				i=j-1;
+			}
+		t=0;
+		for(i=k-1,j=1;i>=0;i--,j++)
+		{
+			p=b[i]/r;
+			if(b[i]%r>0)
+			    p++;
+			 if(p<j){
+			 printf(""%d\n"",j-1);
+			t=1;
+			break;
+			 }
+		}
+			if(t==0)
+			printf(""%d\n"",k);
+	}
+	return 0;
+}
+			",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62157853,brkdnmz,"#include <stdio.h>
+#include <stdlib.h>
+void swap(int* a, int* b) 
+{ 
+    int t = *a; 
+    *a = *b; 
+    *b = t; 
+} 
+  
+
+int partition (int arr[], int low, int high) 
+{ 
+    int pivot = arr[high];     
+    int i = (low - 1);  
+  
+    for (int j = low; j <= high- 1; j++) 
+    { 
+        if (arr[j] < pivot) 
+        { 
+            i++;
+            swap(&arr[i], &arr[j]); 
+        } 
+    } 
+    swap(&arr[i + 1], &arr[high]); 
+    return (i + 1); 
+} 
+void quickSort(int arr[], int low, int high) 
+{ 
+    if (low < high) 
+    { 
+        int pi = partition(arr, low, high); 
+  
+        quickSort(arr, low, pi - 1); 
+        quickSort(arr, pi + 1, high); 
+    } 
+} 
+int main()
+{
+    int q; scanf(""%d"", &q);
+    int *arr = calloc(100000, sizeof(int));
+    int n, r;
+    for(int i = 0; i < q; i++){
+        scanf(""%d %d"", &n, &r);
+        for(int k = 0; k < n; k++){
+            scanf(""%d"", arr+k);
+        }
+        quickSort(arr, 0, n - 1);
+        int res = 0;
+        int c = 0;
+        int d = n - 1;
+        while(1){
+            for(; d >= 0; d--){
+                if(arr[d - 1] <= 0){
+                        d--;
+                        break;  
+                }
+                //printf(""%d\n"", d);
+                while(1){
+                    if(d == 0){
+                    res++; d--; break;
+                    }
+                    if(arr[d] == arr[d - 1]){
+                        d--;
+                    }else{
+                        break;
+                    }
+                }
+                if(d > 0){
+                    /*if(d == 0){
+                        res++;
+                        d--; 
+                        break;
+                    }*/
+                    int temp = d;
+                    while(temp >= 0){
+                        arr[temp] -= r; 
+                        temp--;
+                    }
+                    res++;
+                    //printf(""%d"", res);
+                    if(arr[d - 1] <= 0){
+                        d--;
+                        break;  
+                    }  
+                }else{
+                    break;
+                }
+            }
+            if(d == n - c - 2 || d == 0 || d == -1) break;
+            c++;
+        }
+        printf(""%d\n"", res);
+    }
+    free(arr);
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62156952,brkdnmz,"#include <stdio.h>
+#include <stdlib.h>
+void swap(int* a, int* b) 
+{ 
+    int t = *a; 
+    *a = *b; 
+    *b = t; 
+} 
+  
+
+int partition (int arr[], int low, int high) 
+{ 
+    int pivot = arr[high];     
+    int i = (low - 1);  
+  
+    for (int j = low; j <= high- 1; j++) 
+    { 
+        if (arr[j] < pivot) 
+        { 
+            i++;
+            swap(&arr[i], &arr[j]); 
+        } 
+    } 
+    swap(&arr[i + 1], &arr[high]); 
+    return (i + 1); 
+} 
+void quickSort(int arr[], int low, int high) 
+{ 
+    if (low < high) 
+    { 
+        int pi = partition(arr, low, high); 
+  
+        quickSort(arr, low, pi - 1); 
+        quickSort(arr, pi + 1, high); 
+    } 
+} 
+int main()
+{
+    int q; scanf(""%d"", &q);
+    int *arr = calloc(100000, sizeof(int));
+    int n, r;
+    for(int i = 0; i < q; i++){
+        scanf(""%d %d"", &n, &r);
+        for(int k = 0; k < n; k++){
+            scanf(""%d"", arr+k);
+        }
+        quickSort(arr, 0, n - 1);
+        int res = 0;
+        int c = 0;
+        int d = n - 1;
+        while(1){
+            for(; d >= 0; d--){
+                //printf(""%d\n"", res);
+                while(1){
+                    if(d == 0){
+                    res++; d--; break;
+                    }
+                    if(arr[d] == arr[d - 1]){
+                        d--;
+                    }else{
+                        break;
+                    }
+                }
+                if(d > 0){
+                    /*if(d == 0){
+                        res++;
+                        d--; 
+                        break;
+                    }*/
+                    int temp = d;
+                    while(temp >= 1){
+                        arr[temp - 1] -= r; 
+                        temp--;
+                    }
+                    res++;
+                    //printf(""%d"", res);
+                    if(arr[d - 1] <= 0){
+                        d--;
+                        break;  
+                    }  
+                }else{
+                    break;
+                }
+            }
+            if(d == n - c - 2 || d == 0 || d == -1) break;
+            c++;
+        }
+        printf(""%d\n"", res);
+    }
+    free(arr);
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62155714,Saznikita,"#include<stdio.h>
+#include<stdlib.h>
+int cmp(const int *i,const int *j){
+	return *i-*j;
+}
+int main(){
+	int t;
+	scanf(""%d"",&t);
+	for(int i=0;i<t;i++){
+		int n,r;
+		scanf(""%d %d"",&n,&r);
+		int x[n];
+		for(int j=0;j<n;j++){
+			scanf(""%d"",&x[j]);
+		}
+		qsort(x,n,sizeof(int),(int (*) (const void *,const void *)) cmp);
+		int res=0;
+		int j=0;
+		while(x[n-j-1]>res*r && j<n-1){
+			j++;
+			if(x[n-j-1]!=x[n-j])	res++;
+		}
+		printf(""%d\n"",res);
+	}
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62155608,abhibenne,"#include<stdio.h>
+
+int all_destroyed(int a[],int n)
+{
+	int i;
+	for(i=0;i<n;i++)
+	{
+		if(a[i]!=-1)
+			return 1;
+	}
+	return 0;
+}
+
+void search_replace(int a[],int ele,int n)
+{
+	int i;
+	for(i=0;i<n;i++)
+	{
+		if(a[i]==ele)
+			a[i]=-1;
+	}
+}
+
+void change_rest(int a[],int ele,int n,int r)
+{
+	int i;
+	for(i=0;i<n;i++)
+	{
+		a[i]-=r;
+		if(a[i]<=0)
+			a[i]=-1;
+	}
+}
+
+int next_target(int a[],int n)
+{
+	int i;
+	for(i=n-1;i>=0;i--)
+	{
+		if(a[i]!=-1)
+			return i;
+	}
+	return -1;
+}
+
+
+int main()
+{
+	int t;scanf(""%d"",&t);
+	while(t--)
+	{
+		int n,r,i;
+		scanf(""%d%d"",&n,&r);
+		int x[n];
+		for(i=0;i<n;i++)
+		{
+			scanf(""%d"",&x[i]);
+		}
+		int select=n-1;int count=0;
+		while(all_destroyed(x,n) && select!=-1)
+		{
+			search_replace(x,x[select],n);
+			change_rest(x,x[select],n,r);
+			select=next_target(x,select);
+			count++;
+		}
+		printf(""%d\n"",count);
+	}
+	return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62154279,Saznikita,"#include<stdio.h>
+#include<stdlib.h>
+int cmp(const int *i,const int *j){
+	return *i-*j;
+}
+int main(){
+	int t;
+	scanf(""%d"",&t);
+	for(int i=0;i<t;i++){
+		int n,r;
+		int h=0;
+		scanf(""%d %d"",&n,&r);
+		int x[n];
+		for(int j=0;j<n;j++){
+			scanf(""%d"",&x[j]);
+		}
+		qsort(x,n,sizeof(int),(int (*) (const void *,const void *)) cmp);
+		int res=0;
+		while(x[n-res-1]>res*r && res<n-1){
+			if(x[n-res-1]==x[n-res])	h++;
+			res++;
+		}
+		printf(""%d\n"",res-h);
+	}
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62153993,brkdnmz,"#include <stdio.h>
+#include <stdlib.h>
+void swap(int* a, int* b) 
+{ 
+    int t = *a; 
+    *a = *b; 
+    *b = t; 
+} 
+  
+
+int partition (int arr[], int low, int high) 
+{ 
+    int pivot = arr[high];     
+    int i = (low - 1);  
+  
+    for (int j = low; j <= high- 1; j++) 
+    { 
+        if (arr[j] < pivot) 
+        { 
+            i++;
+            swap(&arr[i], &arr[j]); 
+        } 
+    } 
+    swap(&arr[i + 1], &arr[high]); 
+    return (i + 1); 
+} 
+void quickSort(int arr[], int low, int high) 
+{ 
+    if (low < high) 
+    { 
+        int pi = partition(arr, low, high); 
+  
+        quickSort(arr, low, pi - 1); 
+        quickSort(arr, pi + 1, high); 
+    } 
+} 
+int main()
+{
+    int q; scanf(""%d"", &q);
+    int *arr = calloc(100000, sizeof(int));
+    int n, r;
+    for(int i = 0; i < q; i++){
+        scanf(""%d %d"", &n, &r);
+        for(int k = 0; k < n; k++){
+            scanf(""%d"", arr+k);
+        }
+        quickSort(arr, 0, n - 1);
+        int res = 0;
+        int c = 0;
+        int d;
+        while(1){
+            for(d = n - c - 1; d >= 0; d--){
+                //printf(""%d"", d);
+                while(1){
+                    if(d == 0){
+                    res++; d--; break;
+                    }
+                    if(arr[d] == arr[d - 1]){
+                        d--;
+                    }else{
+                        break;
+                    }
+                }
+                if(d > 0){
+                    /*if(d == 0){
+                        res++;
+                        d--; 
+                        break;
+                    }*/
+                    arr[d - 1] -= r; 
+                    res++;
+                    //printf(""%d"", res);
+                    if(arr[d - 1] <= 0) break; 
+                }else{
+                    break;
+                }
+            }
+            if(d == n - c - 2 || d == 0 || d == -1) break;
+            c++;
+        }
+        printf(""%d\n"", res);
+    }
+    free(arr);
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62153388,Saznikita,"#include<stdio.h>
+#include<stdlib.h>
+int cmp(const int *i,const int *j){
+	return *i-*j;
+}
+int main(){
+	int t;
+	scanf(""%d"",&t);
+	for(int i=0;i<t;i++){
+		int n,r;
+		int h=0;
+		scanf(""%d %d"",&n,&r);
+		int x[n];
+		for(int j=0;j<n;j++){
+			scanf(""%d"",&x[j]);
+		}
+		qsort(x,n,sizeof(int),(int (*) (const void *,const void *)) cmp);
+		int res=0;
+		while(x[n-res-1]>res*r){
+			if(x[n-res-1]==x[n-res])	h++;
+			res++;
+		}
+		printf(""%d\n"",res-h);
+	}
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62152417,Compiler_Error,"#include<stdio.h>
+int main()
+{
+    int t,i,n,r;
+    scanf(""%d"",&t);
+    for(i=1;i<=t;i++)
+    {
+        scanf(""%d %d"",&n,&r);
+        int j,x[n],max=0,c=0;
+        for(j=0;j<n;j++)
+        {
+            scanf(""%d"",&x[j]);
+            if(x[j]>max)
+                max=x[j];
+        }
+        for(j=0;j<n;j++)
+        {
+            if(x[j]>0&& x[j]<max)
+            {
+                x[j]-=r;
+                ++c;
+            }
+
+
+        }
+        printf(""%d\n"",c);
+
+    }
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62150205,Stream_Cipher,"#include<stdio.h>
+int main(){
+    int t;scanf(""%d"",&t);while(t--){
+        int n,Time,Q,surr_temp,left,right,min=10000001,exist=-1,loc;
+        scanf(""%d%d%d%d%d"",&n,&Q,&surr_temp,&left,&right);
+        int temp[n],price[n],temp1[n],price1[n];
+        
+        for(int i=0;i<n;i++)
+        scanf(""%d%d"",&temp1[i],&price1[i]);
+        Time=Q;
+        //for(int Time=1;Time<=Q;Time++)
+        {
+            for(int i=0;i<n;i++)
+        {
+            temp[i]=temp1[i];
+            price[i]=price1[i];
+        }
+        min=10000001;
+        exist=-1;
+        for(int i=0;i<n;i++){
+            
+            if(temp[i]<surr_temp){
+                temp[i]=temp[i]+Time;
+                if(temp[i]>surr_temp)temp[i]=surr_temp;}
+            if(temp[i]>surr_temp){
+              temp[i]=temp[i]-Time;
+                if(temp[i]<surr_temp)
+                    temp[i]=surr_temp;
+            }
+            if(temp[i]==surr_temp)
+                temp[i]=surr_temp;
+            if(temp[i]>=left&&temp[i]<=right){
+                exist=1;
+                loc=price[i];
+                if(loc<min)
+                    min=loc;
+            }
+        }
+        if(exist==1)
+        printf(""%d "",min);
+        else
+        printf(""-1 "");
+        
+        }
+        printf(""\n"");
+    }
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62150091,Corle,"#include<stdio.h>
+int main()
+{
+    int t,n,r,i,k;
+    int s[10000];
+    int ans[10000];
+    scanf(""%d\n"",&t);
+    for(i=0;i<=t-1;i++)
+    {
+        scanf(""%d%d\n"",&n,&r);
+        for(k=0;k<=n-1;k++)
+        {
+            scanf(""%d"",&s[k]);
+        }
+        
+    }
+    int a,b;
+    a=b=2;
+    printf(""%d\n"",a);
+    printf(""%d\n"",b);
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62149796,Corle,"#include<stdio.h>
+int main()
+{
+    int t,n,r,i,k;
+    int s[10000];
+    int ans[10000];
+    scanf(""%d\n"",&t);
+    for(i=0;i<=t-1;i++)
+    {
+        scanf(""%d%d\n"",&n,&r);
+        for(k=0;k<=n-1;k++)
+        {
+            scanf(""%d"",&s[k]);
+        }
+        
+    }
+    int a,b;
+    a=b=2;
+    printf(""%d%d\n"",a,b);
+    printf(""%d%d\n"",a,b);
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62148183,mariamyshko,"#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int cmp_int(const void* a,const void* b) {
+    return (*(const int *)a)-(*(const int *)b);
+}
+int main() {
+	int q,j;
+	scanf(""%d"",&q);
+	for(j=0;j<q;j++) {
+        int n,r;
+        scanf(""%d%d"",&n,&r);
+        int A[n],i,z=0,k,s=n;
+        for(i=0;i<n;i++) {
+            scanf(""%d"",&A[i]);   
+        }
+        qsort(A,n,sizeof(A[0]),cmp_int);
+	for(i=1;n-z<n;i++) {
+		z=0;
+		for(k=0;k<n;k++) {
+			if(i!=s) {
+				A[i]=A[i]-r;
+			}
+			else {
+				A[i]=0;
+			}
+		}
+		for(k=0;k<n;k++) {
+			if(A[k]>0) {
+				z++;
+			}	
+		}
+		s--;
+	}
+	printf(""%d\n"",i+1);
+	}
+        return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62147835,Saznikita,"#include<stdio.h>
+#include<stdlib.h>
+int cmp(const int *i,const int *j){
+	return *i-*j;
+}
+int main(){
+	int t;
+	scanf(""%d"",&t);
+	for(int i=0;i<t;i++){
+		int n,r;
+		scanf(""%d %d"",&n,&r);
+		int x[n];
+		for(int j=0;j<n;j++){
+			scanf(""%d"",&x[j]);
+		}
+		qsort(x,n,sizeof(int),(int (*) (const void *,const void *)) cmp);
+		int res=0;
+		while(x[n-1]!=0){
+			for(int j=0;j<n;j++){
+				x[j]-=r;
+				if(x[j]<=0 || x[j]==x[n-1]-1 || x[j]==x[n-1]){
+					x[j]=0;
+				}
+			}
+			res++;
+			printf(""\n"");
+			qsort(x,n,sizeof(int),(int (*) (const void *,const void *)) cmp);
+		}
+		printf(""%d"",res);
+	}
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62143126,bryan303,"#include <stdio.h>
+
+int com (const int * a , const int *b){
+    return *a-*b;
+}
+
+int main(){
+    int q;
+    scanf(""%d"",&q);
+    while(q--){
+        int n,r;
+        scanf(""%d %d"",&n,&r);
+        int a[n];
+        for(int j = 0 ; j < n ;j++){
+            scanf(""%d"",&a[j]);
+        }
+        qsort(a,n,sizeof(int),com);
+        int hasil = 0;
+        char notFinished = 1;
+        int max = n -1;
+        int curr = 0;
+        while(notFinished){
+            int temp = a[max];
+            if(max-1==-1){
+                notFinished=0;
+            }
+            char bol = 0;
+            for(int i = max-1 ; i >=0 ; i--){
+                if(a[i]!=a[max]){
+                    bol=1;
+                    max=i;
+                    break;
+                }
+            }
+            //printf(""max%d %d\n"",max,a[max]);
+            curr+=r;
+            if(max==-1||curr>=a[max]){
+                notFinished = 0;
+            }
+            hasil+=1;
+        }
+        printf(""%d\n"",hasil);
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62142697,myungum,"#include <stdio.h>
+#define MAX 100000
+int chk[MAX + 1];
+
+int main(void)
+{
+	int q = 0;
+
+	scanf(""%d"", &q);
+	while (q--)
+	{
+		int n = 0;
+		long long r = 0;
+
+		scanf(""%d%lld"", &n, &r);
+		for (int i = 0, x; i < n; i++)
+		{
+			scanf(""%d"", &x);
+			chk[x] = 1;
+		}
+
+		long long cloc = MAX, cnt = 0;
+		while (1)
+		{
+			while (cloc > 0 && chk[cloc] == 0)
+				cloc--;
+
+			if (cloc - cnt * r > 0)
+			{
+				cnt++;
+				cloc--;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		printf(""%lld\n"", cnt);
+	}
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62141775,myungum,"#include <stdio.h>
+#define MAX 100000
+int chk[MAX + 1];
+
+int main(void)
+{
+	int q = 0;
+
+	scanf(""%d"", &q);
+	while (q--)
+	{
+		int n = 0, r = 0;
+
+		scanf(""%d%d"", &n, &r);
+		for (int i = 0, x; i < n; i++)
+		{
+			scanf(""%d"", &x);
+			chk[x] = 1;
+		}
+
+		int cloc = MAX, cnt = 0;
+		while (1)
+		{
+			while (cloc > 0 && chk[cloc] == 0)
+				cloc--;
+
+			if (cloc - cnt * r > 0)
+			{
+				cnt++;
+				cloc--;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		printf(""%d\n"", cnt);
+	}
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62139758,pengin_2000,"#include<stdio.h>
+int h[100005], l;
+void f1(int n)
+{
+	h[l] = n;
+	int now = l;
+	l++;
+	while (now > 0)
+	{
+		if (h[(now - 1) / 2] > h[now])
+		{
+			int f = h[now];
+			h[now] = h[(now - 1) / 2];
+			h[(now - 1) / 2] = f;
+		}
+		now = (now - 1) / 2;
+	}
+	return;
+}
+int f2()
+{
+	int res = h[0];
+	l--;
+	h[0] = h[l];
+	int now = 0;
+	for (;;)
+	{
+		if (2 * now + 2 < l)
+		{
+			if (h[2 * now + 1] < h[2 * now + 2])
+			{
+				if (h[now] > h[2 * now + 1])
+				{
+					int f = h[now];
+					h[now] = h[2 * now + 1];
+					h[2 * now + 1] = f;
+				}
+				now = 2 * now + 1;
+			}
+			else
+			{
+				if (h[now] > h[2 * now + 2])
+				{
+					int f = h[now];
+					h[now] = h[2 * now + 2];
+					h[2 * now + 2] = f;
+				}
+				now = 2 * now + 2;
+			}
+		}
+		else if (2 * now + 1 < l)
+		{
+			if (h[now] > h[2 * now + 1])
+			{
+				int f = h[now];
+				h[now] = h[2 * now + 1];
+				h[2 * now + 1] = f;
+			}
+			now = 2 * now + 1;
+		}
+		else
+			break;
+	}
+	return res;
+}
+int main()
+{
+	int q;
+	scanf(""%d"", &q);
+	int i, j;
+	int n, r, m;
+	int x[100005];
+	int min, mid, max;
+	for (j = 0; j < q; j++)
+	{
+		scanf(""%d %d"", &n, &r);
+		for (i = 0; i < n; i++)
+			scanf(""%d"", &x[i]);
+		l = 0;
+		for (i = 0; i < n; i++)
+			f1(x[i]);
+		x[0] = f2();
+		m = 1;
+		for (i = 1; i < n; i++)
+		{
+			x[m] = f2();
+			if (x[m] != x[m - 1])
+				m++;
+		}
+		min = 0;
+		max = m;
+		while (max - min > 1)
+		{
+			mid = (max + min) / 2;
+			if (x[m - mid - 1] < r * mid)
+				max = mid;
+			else
+				min = mid;
+		}
+		printf(""%d\n"", max);
+	}
+	return 0;
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62139506,bryan303,"#include <stdio.h>
+
+int com (const int * a , const int *b){
+    return *a-*b;
+}
+
+int main(){
+    int q;
+    scanf(""%d"",&q);
+    while(q--){
+        int n,r;
+        scanf(""%d %d"",&n,&r);
+        int a[n];
+        for(int j = 0 ; j < n ;j++){
+            scanf(""%d"",&a[j]);
+        }
+        qsort(a,n,sizeof(int),com);
+        int hasil = 0;
+        char notFinished = 1;
+        int max = n -1;
+        int curr = 0;
+        while(notFinished){
+            int temp = a[max];
+            char bol = 0;
+            for(int i = max-1 ; i >=0 ; i--){
+                if(a[i]!=a[max]){
+                    bol=1;
+                    max=i;
+                    break;
+                }
+            }
+            //printf(""max%d %d\n"",max,a[max]);
+            curr+=r;
+            if(max!=-1&&curr>=a[max]){
+                notFinished = 0;
+            }
+            hasil+=1;
+        }
+        printf(""%d\n"",hasil);
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62139154,Saznikita,"#include<stdio.h>
+int main(){
+	long long t;
+	scanf(""%I64d"",&t);
+	int h=0;
+	long long x[t],y[t];
+	for(long long i=0;i<t;i++){
+		scanf("" %I64d  %I64d"",&x[i],&y[i]);
+		h=0;
+		for(int k=x[i]-y[i];k>=0;k++){
+			if((x[i]-y[i])%k==0){
+				printf(""YES\n"");
+				h++;
+				break;
+			}
+		}
+		if(h==0){
+			printf(""NO\n"");
+		}
+	}
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62137254,harshita1142,"#include<stdio.h>
+#include<conio.h>
+int main()
+{
+    int c,y,r;
+    scanf(""%d%d%d"",&c,&y,&r);
+    if(c==y)
+    {
+    c=0;
+    }
+    if(c>y)
+    {
+    c=y-r;
+    }
+    if(c<y)
+    {
+    c=y+r;
+    }
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62133926,prajwal1721,"#include<stdio.h>
+short int check(long int n,long int *f);
+int  main()
+{
+    int q;
+    long f,fl=1;
+    scanf(""%d"",&q);
+    while (q--)
+    {
+        fl=1;
+        long int a,b;
+        scanf(""%ld%ld"",&a,&b);
+        long int n=a-b;
+        while(n&1==0 && n==2)
+            n/=2;
+        int op=check(n,&f);
+        // printf(""%d::"",f);
+        if(check(f,&f) && f<n)
+            fl=0;
+        // printf(""%ld::"",n);
+        if(check(n,&f))
+            printf(""YES\n"");
+        else if(fl==0)
+            printf(""YES\n"");
+        else
+            printf(""NO\n"");
+    }
+    
+}
+short int check(long int n,long int *f)
+{
+    { 
+    if (n <= 1) 
+        return 0; 
+  
+    for (int i = 2; i < n; i++) 
+        if (n % i == 0)
+         {
+             *f=i;
+            return 0; 
+         }
+    return 1; 
+} 
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62133311,myungum,"#include <stdio.h>
+
+int arr[100000];
+
+int main(void)
+{
+	int q = 0;
+
+	scanf(""%d"", &q);
+	while (q--)
+	{
+		int n = 0, r = 0, cidx = 0, cnt = 0;
+
+		scanf(""%d%d"", &n, &r);
+		for (int i = 0; i < n; i++)
+			scanf(""%d"", arr + i);
+
+		cidx = n - 1;
+		cnt = 0;
+		while (cidx >= 0 && arr[cidx] - cnt * r > 0)
+		{
+			cnt++;
+			cidx--;
+		}
+
+		printf(""%d\n"", cnt);
+	}
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62132697,YOK,"#include <stdio.h>
+long long sX[100001];
+long long dX[100001];
+long long temp[100001];
+void mS(long long s[], long long d[], int o, int t)
+{
+    int i, j, k;
+    int c = (o + t) / 2;
+    if (o < c)
+    {
+        mS(d, s, o, c);
+    }
+    if (c + 1 < t)
+    {
+        mS(d, s, c + 1, t);
+    }
+    i = o;
+    j = c + 1;
+    k = o;
+    while (i <= c && j <= t)
+    {
+        if (s[i] > s[j])
+        {
+            d[k] = s[i];
+            i++;
+        }
+        else
+        {
+            d[k] = s[j];
+            j++;
+        }
+        k++;
+    }
+    while (i <= c)
+    {
+        d[k] = s[i];
+        i++;
+        k++;
+    }
+    while (j <= t)
+    {
+        d[k] = s[j];
+        j++;
+        k++;
+    }
+}
+int main()
+{
+    int i;
+    int Q;
+    int n;
+    long long r;
+    long long C;
+    long long t;
+    long long R;
+    scanf(""%d"", &Q);
+    while (Q--)
+    {
+        scanf(""%d %I64d"", &n, &r);
+        C = 2;
+        t = 0;
+        for (i = 0; i < n; i++)
+        {
+            scanf(""%I64d"", &sX[i]);
+        }
+        for (i = 0; i < n; i++)
+        {
+            dX[i] = sX[i];
+        }
+        mS(sX, dX, 0, n - 1);
+        temp[1] = dX[1] - r;
+        for (i = 2; i < n; i++)
+        {
+            temp[i] = dX[i];
+        }
+        temp[n] = 0;
+        for (R = 1; temp[R] > 0; R++)
+        {
+            if (dX[R - 1] > dX[R])
+            {
+                temp[R + 1] -= C * r;
+                C++;
+            }
+            else
+            {
+                t++;
+            }
+        }
+        printf(""%I64d\n"", R - t);
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62132734,pengin_2000,"#include<stdio.h>
+int h[100005], l;
+void f1(int n)
+{
+	h[l] = n;
+	int now = l;
+	l++;
+	while (now > 0)
+	{
+		if (h[(now - 1) / 2] > h[now])
+		{
+			int f = h[now];
+			h[now] = h[(now - 1) / 2];
+			h[(now - 1) / 2] = f;
+		}
+		now = (now - 1) / 2;
+	}
+	return;
+}
+int f2()
+{
+	int res = h[0];
+	l--;
+	h[0] = h[l];
+	int now = 0;
+	for (;;)
+	{
+		if (2 * now + 2 < l)
+		{
+			if (h[2 * now + 1] < h[2 * now + 2])
+			{
+				if (h[now] > h[2 * now + 1])
+				{
+					int f = h[now];
+					h[now] = h[2 * now + 1];
+					h[2 * now + 1] = f;
+				}
+				now = 2 * now + 1;
+			}
+			else
+			{
+				if (h[now] > h[2 * now + 2])
+				{
+					int f = h[now];
+					h[now] = h[2 * now + 1];
+					h[2 * now + 2] = f;
+				}
+				now = 2 * now + 2;
+			}
+		}
+		else if (2 * now + 1 < l)
+		{
+			if (h[now] > h[2 * now + 1])
+			{
+				int f = h[now];
+				h[now] = h[2 * now + 1];
+				h[2 * now + 1] = f;
+			}
+			now = 2 * now + 1;
+		}
+		else
+			break;
+	}
+	return res;
+}
+int main()
+{
+	int q;
+	scanf(""%d"", &q);
+	int i, j;
+	int n, r, m;
+	int x[100005];
+	int min, mid, max;
+	for (j = 0; j < q; j++)
+	{
+		scanf(""%d %d"", &n, &r);
+		for (i = 0; i < n; i++)
+			scanf(""%d"", &x[i]);
+		l = 0;
+		for (i = 0; i < n; i++)
+			f1(x[i]);
+		x[0] = f2();
+		m = 1;
+		for (i = 1; i < n; i++)
+		{
+			x[m] = f2();
+			if (x[m] != x[m - 1])
+				m++;
+		}
+		min = 0;
+		max = m;
+		while (max - min > 1)
+		{
+			mid = (max + min) / 2;
+			if (x[m - mid - 1] < r * mid)
+				max = mid;
+			else
+				min = mid;
+		}
+		printf(""%d\n"", max);
+	}
+	return 0;
+}",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62132029,YOK,"#include <stdio.h>
+long long sX[100001];
+long long dX[100001];
+long long temp[100001];
+void mS(long long s[], long long d[], int o, int t)
+{
+    int i, j, k;
+    int c = (o + t) / 2;
+    if (o < c)
+    {
+        mS(d, s, o, c);
+    }
+    if (c + 1 < t)
+    {
+        mS(d, s, c + 1, t);
+    }
+    i = o;
+    j = c + 1;
+    k = o;
+    while (i <= c && j <= t)
+    {
+        if (s[i] > s[j])
+        {
+            d[k] = s[i];
+            i++;
+        }
+        else
+        {
+            d[k] = s[j];
+            j++;
+        }
+        k++;
+    }
+    while (i <= c)
+    {
+        d[k] = s[i];
+        i++;
+        k++;
+    }
+    while (j <= t)
+    {
+        d[k] = s[j];
+        j++;
+        k++;
+    }
+}
+int main()
+{
+    int i;
+    int Q;
+    int n;
+    long long r;
+    long long C;
+    long long t;
+    long long R;
+    scanf(""%d"", &Q);
+    while (Q--)
+    {
+        scanf(""%d %I64d"", &n, &r);
+        C = 2;
+        t = 0;
+        for (i = 0; i < n; i++)
+        {
+            scanf(""%I64d"", &sX[i]);
+        }
+        for (i = 0; i < n; i++)
+        {
+            dX[i] = sX[i];
+        }
+        mS(sX, dX, 0, n - 1);
+        for (i = 0; i < n; i++)
+        {
+            temp[i] = dX[i];
+        }
+        temp[n] = 0;
+        for (R = 1; temp[R] > 0; R++)
+        {
+            if (dX[R - 1] > dX[R])
+            {
+                temp[R + 1] -= C * r;
+                C++;
+            }
+            else
+            {
+                t++;
+            }
+        }
+        printf(""%I64d\n"", R - t);
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238
+62131082,YOK,"#include <stdio.h>
+int sX[100001];
+int dX[100001];
+int temp[100001];
+void mS(int s[], int d[], int o, int t)
+{
+    int i, j, k;
+    int c = (o + t) / 2;
+    if (o < c)
+    {
+        mS(d, s, o, c);
+    }
+    if (c + 1 < t)
+    {
+        mS(d, s, c + 1, t);
+    }
+    i = o;
+    j = c + 1;
+    k = o;
+    while (i <= c && j <= t)
+    {
+        if (s[i] > s[j])
+        {
+            d[k] = s[i];
+            i++;
+        }
+        else
+        {
+            d[k] = s[j];
+            j++;
+        }
+        k++;
+    }
+    while (i <= c)
+    {
+        d[k] = s[i];
+        i++;
+        k++;
+    }
+    while (j <= t)
+    {
+        d[k] = s[j];
+        j++;
+        k++;
+    }
+}
+int main()
+{
+    int i;
+    int Q;
+    int n, r;
+    int C;
+    int t;
+    int R;
+    scanf(""%d"", &Q);
+    while (Q--)
+    {
+        scanf(""%d %d"", &n, &r);
+        C = 2;
+        t = 0;
+        for (i = 0; i < n; i++)
+        {
+            scanf(""%d"", &sX[i]);
+        }
+        for (i = 0; i < n; i++)
+        {
+            dX[i] = sX[i];
+        }
+        mS(sX, dX, 0, n - 1);
+        for (i = 0; i < n; i++)
+        {
+            temp[i] = dX[i];
+        }
+        for (R = 1; temp[R] > 0; R++)
+        {
+            if (R == n - 1)
+            {
+                R++;
+                break;
+            }
+            if (dX[R - 1] > dX[R])
+            {
+                temp[R + 1] -= C * r;
+                C++;
+            }
+            else
+            {
+                t++;
+            }
+        }
+        printf(""%d\n"", R - t);
+    }
+    return 0;
+}
+",B - Kill `Em All,GNU C11,WRONG_ANSWER,1238

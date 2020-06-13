@@ -1,0 +1,23 @@
+--- buggy.txt	2020-06-09 09:02:59.000000000 +0700
++++ correct.txt	2020-06-09 09:02:23.000000000 +0700
+@@ -9,8 +9,6 @@
+     for(int i=0;i<pruebas;i++)
+     {
+         R[i]=0;
+-        result1=0;
+-        result2=0;
+         scanf("%d %d %d",&a,&b,&c);
+         while(b>0 && c>=2)
+         {
+@@ -26,7 +24,8 @@
+         }
+ 
+     }
+-    printf("%d\n",R[0]);
+-    printf("%d\n",R[1]);
+-    printf("%d\n",R[2]);
++    for(int i=0;i<pruebas;i++)
++    {
++        printf("%d\n",R[i]);
++    }
+ }
